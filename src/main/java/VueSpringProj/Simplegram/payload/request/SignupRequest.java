@@ -20,7 +20,7 @@ public class SignupRequest {
 
     private Set<String> role;
 
-    //нужно как-то добавить файл изображения
+    //нужно как-то добавить файл изображения, вероятнее всего здесь будет String avatarPath
 
     public String getUsername() {
         return username;

@@ -2,8 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Registration from '../views/Registration.vue'
+import * as VeeValidate from 'vee-validate'
 
 Vue.use(VueRouter)
+Vue.use(VeeValidate)
 
 const routes = [
   {

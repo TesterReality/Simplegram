@@ -18,17 +18,41 @@
                             <v-window>
                                 <v-window-item>
                                     <v-card-text>
-                                        <v-form>
-                                            <v-text-field label="Введите Ваш логин" name="login" prepend-inner-icon="mdi-account"
-                                                          v-model="loginText"
+                                        <v-form name="form" @submit.prevent >
+                                            <v-text-field v-model="user.login"
+                                                          v-validate="'required|min:3|max:20'"
+                                                          label="Введите Ваш логин" prepend-inner-icon="mdi-account"
+                                                          name="login"
                                                           type="text" class="rounded-lg" outlined @change="loginChange"></v-text-field>
-                                            <v-text-field label="Введите Ваше Имя" name="name" prepend-inner-icon="mdi-rename-box"
+                                            <div
+                                                    v-if="submitted && errors.has('login')"
+                                                    class="alert-danger"
+                                            >{{errors.first('login')}}</div>
+
+                                            <v-text-field v-model="user.username"
+                                                          v-validate="'required|min:3|max:20'"
+                                                          label="Введите Ваше Имя"
+                                                          name="username"
+                                                          prepend-inner-icon="mdi-rename-box"
                                                           type="text" class="rounded-lg" outlined></v-text-field>
-                                            <v-text-field label="Введите Ваш пароль" name="password" prepend-inner-icon="mdi-lock"
+
+                                            <div
+                                                    v-if="submitted && errors.has('username')"
+                                                    class="alert-danger"
+                                            >{{errors.first('username')}}</div>
+
+                                            <v-text-field v-model="user.password"
+                                                          v-validate="'required|min:6|max:40'"
+                                                          label="Введите Ваш пароль" name="password" prepend-inner-icon="mdi-lock"
                                                           type="password" class="rounded-lg" outlined></v-text-field>
-                                            <v-text-field label="Повторите пароль" name="password"
+                                            <v-text-field label="Повторите пароль" name="password1"
                                                           prepend-inner-icon="mdi-lock-outline" type="password" class="rounded-lg"
                                                           outlined></v-text-field>
+                                            <div
+                                                    v-if="submitted && errors.has('password')"
+                                                    class="alert-danger"
+                                            >{{errors.first('password')}}</div>
+
                                             <v-card-text class="text-left">
                                     <span class="caption grey--text text--darken-1">
                                         Загрузите изображение профиля
@@ -55,7 +79,8 @@
                                                     </v-card-text>
                                                 </v-card-actions>
                                             </v-flex>
-                                            <v-btn class="rounded-lg" color="#000000" x-large block dark>Зарегистрироваться</v-btn>
+                                            <v-btn class="rounded-lg" color="#000000" x-large block dark @click="handleRegister">
+                                                Зарегистрироваться</v-btn>
                                             <v-card-actions class="text--secondary">
                                                 <v-spacer></v-spacer>
                                                 <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
@@ -64,6 +89,13 @@
                                                 </v-card-text>
                                             </v-card-actions>
                                         </v-form>
+
+                                        <div
+                                                v-if="message"
+                                                class="alert"
+                                                :class="successful ? 'alert-success' : 'alert-danger'"
+                                        >{{message}}</div>
+
                                     </v-card-text>
                                 </v-window-item>
                             </v-window>
@@ -77,13 +109,26 @@
 </template>
 
 <script>
+    import User from '../models/user';
+
     export default {
+        name: 'Registration',
         data() {
             return {
+                user: new User('', '', ''),
+                submitted: false,
+                successful: false,
+                message: '',
+
                 imageURL: '',
                 image: null,
                 loginText: '',
                 isUserLoadImage: false
+            }
+        },
+        mounted() {
+            if (this.loggedIn) {
+                this.$router.push('/');
             }
         },
         methods: {
@@ -112,6 +157,33 @@
                     this.imageURL='https://api.multiavatar.com/'+event+'.png';
                 }
             },
+            handleRegister() {
+                console.log("test");
+                this.message = '';
+                this.submitted = true;
+                this.$validator.validate().then(isValid => {
+                    console.log("test1");
+
+                    if (isValid) {
+                        this.$store.dispatch('auth/register', this.user).then(
+                            data => {
+                                this.message = data.message;
+                                this.successful = true;
+                            },
+                            error => {
+                                this.message =
+                                    (error.response && error.response.data && error.response.data.message) ||
+                                    error.message ||
+                                    error.toString();
+                                this.successful = false;
+                            }
+                        );
+                    }else {
+                        console.log("test2");
+
+                    }
+                });
+            }
         }
     }
 </script>

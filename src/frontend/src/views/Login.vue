@@ -16,7 +16,10 @@
                   <v-card-actions class="text--secondary" align="center">
                     <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
                     <v-card-text>
-                    Нет аккаунта? <a href="/registration" class="pl-2" style="color: #000000">Зарегистрироваться</a>
+                      <router-link v-if="currentUser" to="/user" class="nav-link">
+                        {{ currentUser.username }}
+                      </router-link>
+                      Нет аккаунта? <a href="/registration" class="pl-2" style="color: #000000">Зарегистрироваться</a>
                     </v-card-text>
                   </v-card-actions>
                 </v-form>
@@ -30,7 +33,26 @@
 </template>
 
 <script>
+  export default {
+    computed: {
+      currentUser() {
+        return this.$store.state.auth.user;
+      },
+      showAdminBoard() {
+        if (this.currentUser && this.currentUser.roles) {
+          return this.currentUser.roles.includes('ROLE_ADMIN');
+        }
 
+        return false;
+      }
+    },
+    methods: {
+      logOut() {
+        this.$store.dispatch('auth/logout');
+        this.$router.push('/login');
+      }
+    }
+  };
 </script>
 
 <style lang="css" scoped>
