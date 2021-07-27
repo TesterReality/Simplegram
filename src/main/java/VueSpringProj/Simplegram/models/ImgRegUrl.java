@@ -1,5 +1,6 @@
 package VueSpringProj.Simplegram.models;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.imageio.ImageIO;
@@ -47,12 +48,13 @@ public class ImgRegUrl {
 
     private void saveToAvatarDir(BufferedImage image) {
         String pathToUserAvatrs = uploadsDir + "avatars/";
-        String fileName = userLogin+".png";
+        String fileName = DigestUtils.md5Hex(userLogin) +".png";
         File dirUpload = new File(pathToUserAvatrs);
         File f = new File(dirUpload.getAbsolutePath());
         if (!f.exists()) {
             f.mkdirs();
         }
+
         File outputfile = new File(dirUpload.getAbsolutePath() + "/" + fileName);
         try {
             ImageIO.write(image, "png", outputfile);

@@ -36,6 +36,10 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    @Size(max = 140)
+    private String avatar;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -45,10 +49,12 @@ public class User {
     public User() {
     }
 
-    public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 20) String login, @NotBlank @Size(max = 120) String password) {
+
+    public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 20) String login, @NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 140) String avatar) {
         this.username = username;
         this.login = login;
         this.password = password;
+        this.avatar = avatar;
     }
 
     public UUID getId() {
@@ -89,5 +95,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

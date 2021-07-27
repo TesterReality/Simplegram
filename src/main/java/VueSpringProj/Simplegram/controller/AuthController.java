@@ -12,6 +12,7 @@ import VueSpringProj.Simplegram.repository.RoleRepository;
 import VueSpringProj.Simplegram.repository.UserRepository;
 import VueSpringProj.Simplegram.security.jwt.JwtUtils;
 import VueSpringProj.Simplegram.security.services.UserDetailsImpl;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,8 @@ public class AuthController {
         // Создаем новый аккаунт
         User user = new User(signupRequest.getUsername(),
                 signupRequest.getLogin(),
-                encoder.encode(signupRequest.getPassword()));
+                encoder.encode(signupRequest.getPassword()),
+                DigestUtils.md5Hex(signupRequest.getLogin()));
 
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
@@ -131,11 +133,13 @@ public class AuthController {
                 if(!f.exists()) {
                     f.mkdirs();
                 }
-                File f1 = new File(dirUpload.getAbsolutePath()+"/"+orgName);
+                String fullAvatarName = DigestUtils.md5Hex(signupRequest.getLogin())+"."+getFileExtension(orgName);
+                File f1 = new File(dirUpload.getAbsolutePath()+"/"+fullAvatarName);
 
                 try (OutputStream os = new FileOutputStream(f1)) {
                     os.write(signupRequest.getFile().getBytes());
                 }
+                user.setAvatar(fullAvatarName);
 
             } catch (IOException e) {
                 //Если не удалось записать файл
@@ -145,9 +149,17 @@ public class AuthController {
         {
             //значит пользователь не загрузил аватарку, но мы получили от него url изображения с ресурса
             new ImgRegUrl(signupRequest.getImgUrl(),user.getLogin(),uploadsDir).loadAvatarFromUrl();
+            user.setAvatar(user.getAvatar()+".png");
         }
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("Пользователь успешно зарегистрирован!"));
+    }
+
+    //метод определения расширения файла
+    private static String getFileExtension(String fileName) {
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+            return fileName.substring(fileName.lastIndexOf(".")+1);
+        else return "";
     }
 }
