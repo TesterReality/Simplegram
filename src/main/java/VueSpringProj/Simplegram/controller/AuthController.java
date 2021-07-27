@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -66,25 +68,28 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByLogin(signUpRequest.getLogin())) {
+    @RequestMapping(path = "/signup", method = POST)
+    public ResponseEntity<?> registerUser(@ModelAttribute SignupRequest signupRequest) {
+
+        System.out.println(signupRequest.getFile().getOriginalFilename());
+
+        if (userRepository.existsByLogin(signupRequest.getLogin())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Ошибка! Такой лоигн уже занят"));
         }
 
         // Создаем новый аккаунт
-        User user = new User(signUpRequest.getUsername(),
-                signUpRequest.getLogin(),
-                encoder.encode(signUpRequest.getPassword()));
+        User user = new User(signupRequest.getUsername(),
+                signupRequest.getLogin(),
+                encoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Ошибка. Ролей не обнаружено"));
+                    .orElseThrow(() -> new RuntimeException("Ошибка. Роль не найдена"));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {

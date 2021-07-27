@@ -1,11 +1,17 @@
 package VueSpringProj.Simplegram.payload.request;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.File;
 import java.util.Set;
 
 public class SignupRequest {
+    private MultipartFile file;
+
     @NotBlank
     @Size(min = 3, max = 20)
     private String username;
@@ -20,7 +26,21 @@ public class SignupRequest {
 
     private Set<String> role;
 
-    //нужно как-то добавить файл изображения, вероятнее всего здесь будет String avatarPath
+    public Set<String> getRole() {
+        return role;
+    }
+
+    public void setRole(Set<String> role) {
+        this.role = role;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public String getUsername() {
         return username;
@@ -44,13 +64,5 @@ public class SignupRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<String> getRole() {
-        return this.role;
-    }
-
-    public void setRole(Set<String> role) {
-        this.role = role;
     }
 }

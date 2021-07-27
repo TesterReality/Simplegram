@@ -18,16 +18,28 @@
                             <v-window>
                                 <v-window-item>
                                     <v-card-text>
+                                        <v-card-text class="text-center" >
+
+                                        <div
+                                                v-if="message"
+                                                class="alert"
+                                                :class="successful ? 'alert-success' : 'alert-danger'"
+                                        >{{message}}</div>
+                                        </v-card-text>
+
                                         <v-form name="form" @submit.prevent >
                                             <v-text-field v-model="user.login"
                                                           v-validate="'required|min:3|max:20'"
                                                           label="Введите Ваш логин" prepend-inner-icon="mdi-account"
                                                           name="login"
                                                           type="text" class="rounded-lg" outlined @change="loginChange"></v-text-field>
+
                                             <div
                                                     v-if="submitted && errors.has('login')"
                                                     class="alert-danger"
                                             >{{errors.first('login')}}</div>
+
+
 
                                             <v-text-field v-model="user.username"
                                                           v-validate="'required|min:3|max:20'"
@@ -36,10 +48,13 @@
                                                           prepend-inner-icon="mdi-rename-box"
                                                           type="text" class="rounded-lg" outlined></v-text-field>
 
-                                            <div
-                                                    v-if="submitted && errors.has('username')"
-                                                    class="alert-danger"
-                                            >{{errors.first('username')}}</div>
+                                            <v-card-text class="text-center"
+                                                         v-if="submitted && errors.has('username')"
+                                            >
+                                                <span class="caption grey--text text--darken-1">
+                                                    {{errors.first('username')}}
+                                                </span>
+                                            </v-card-text>
 
                                             <v-text-field v-model="user.password"
                                                           v-validate="'required|min:6|max:40'"
@@ -90,12 +105,6 @@
                                             </v-card-actions>
                                         </v-form>
 
-                                        <div
-                                                v-if="message"
-                                                class="alert"
-                                                :class="successful ? 'alert-success' : 'alert-danger'"
-                                        >{{message}}</div>
-
                                     </v-card-text>
                                 </v-window-item>
                             </v-window>
@@ -123,7 +132,9 @@
                 imageURL: '',
                 image: null,
                 loginText: '',
-                isUserLoadImage: false
+                isUserLoadImage: false,
+                filedata: null,
+                formdata:{}
             }
         },
         mounted() {
@@ -138,6 +149,8 @@
             onFilePick(event) {
                 const file = event.target.files;
                 let filename = file[0].name;
+
+
                 if (filename.lastIndexOf('.') <= 0) {
                     return alert('Пожалуйста, добавьте корректный файл.')
                 }
@@ -145,9 +158,17 @@
                 fileReader.addEventListener('load', () => {
                     this.imageURL = fileReader.result;
                 });
-                fileReader.readAsDataURL(file[0]);
+                this.filedata= fileReader.readAsDataURL(file[0]);
                 this.image = file[0];
                 this.isUserLoadImage = true;
+
+                this.formdata = new FormData();
+                let fileFromDate = event.target.files[0];
+                this.formdata.append("file",fileFromDate);
+                console.log ( "File", this.formdata, JSON.stringify ({ 'file': fileFromDate}));
+                console.log(this.formdata);
+
+
             },
             loginChange(event) {
                 console.log(event);
@@ -158,14 +179,20 @@
                 }
             },
             handleRegister() {
-                console.log("test");
+                console.log("Пытаемся отправить запрос на сервер");
                 this.message = '';
                 this.submitted = true;
                 this.$validator.validate().then(isValid => {
-                    console.log("test1");
+                    console.log("Отправляем запрос....");
+                    console.log("image:" + this.image);
 
                     if (isValid) {
-                        this.$store.dispatch('auth/register', this.user).then(
+                       this.formdata.append('username',this.user.username);
+                       this.formdata.append('login',this.user.login);
+                        this.formdata.append('password',this.user.password);
+                        console.log(this.formdata);
+
+                        this.$store.dispatch('auth/register',this.formdata).then(
                             data => {
                                 this.message = data.message;
                                 this.successful = true;
@@ -179,7 +206,7 @@
                             }
                         );
                     }else {
-                        console.log("test2");
+                        console.log("Не пройдена валидация");
 
                     }
                 });

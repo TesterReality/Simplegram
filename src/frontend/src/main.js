@@ -5,11 +5,13 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './store'
 import * as VeeValidate from 'vee-validate'
+import Stringify from 'vue-stringify'
 
 import Vuex from 'vuex';
 Vue.config.productionTip = false;
 Vue.use(VeeValidate);
 Vue.use(Vuex);
+Vue.use(Stringify);
 
 new Vue({
   vuetify,
