@@ -100,7 +100,10 @@
                                                 <v-spacer></v-spacer>
                                                 <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
                                                 <v-card-text>
-                                                    Уже зарегистрированы? <a href="/login" class="pl-2" style="color: #000000">Войти</a>
+                                                    Уже зарегистрированы?
+                                                    <router-link to="/login" class="pl-2" style="color: #000000">
+                                                        Войти
+                                                    </router-link>
                                                 </v-card-text>
                                             </v-card-actions>
                                         </v-form>
@@ -135,6 +138,11 @@
                 isUserLoadImage: false,
                 filedata: null,
                 formdata:{}
+            }
+        },
+        computed: {
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn;
             }
         },
         mounted() {
