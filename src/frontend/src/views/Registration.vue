@@ -184,12 +184,20 @@
                 this.submitted = true;
                 this.$validator.validate().then(isValid => {
                     console.log("Отправляем запрос....");
-                    console.log("image:" + this.image);
 
                     if (isValid) {
+                        if(!this.isUserLoadImage)//если пользоватей не загрузил аватарку, ставим с сайта
+                        {
+                            //значит передает ссылку а бек разбирается
+                            this.formdata = new FormData();
+                            this.formdata.append('imgUrl',this.imageURL);
+                        }
                        this.formdata.append('username',this.user.username);
                        this.formdata.append('login',this.user.login);
                         this.formdata.append('password',this.user.password);
+                        console.log("Перед Добавили урл");
+
+
                         console.log(this.formdata);
 
                         this.$store.dispatch('auth/register',this.formdata).then(

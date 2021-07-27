@@ -14,10 +14,10 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${spmlegram.app.jwtSecret}")
+    @Value("${simplegram.app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${spmlegram.app.jwtExpirationMs}")
+    @Value("${simplegram.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication) {

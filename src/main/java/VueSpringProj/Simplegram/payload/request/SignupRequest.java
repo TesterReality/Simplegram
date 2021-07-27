@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.Set;
 
 public class SignupRequest {
+    private String imgUrl;
+
     private MultipartFile file;
 
     @NotBlank
@@ -23,6 +25,15 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
     private Set<String> role;
 

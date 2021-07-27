@@ -25,7 +25,7 @@ class AuthService {
     register(formdata) {
 
         console.log(formdata);
-        console.log(formdata.get('file'));
+        //console.log(formdata.get('file'));
         const data = [...formdata.entries()];
         console.log(data);
 
