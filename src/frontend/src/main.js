@@ -13,7 +13,9 @@ Vue.use(VeeValidate);
 Vue.use(Vuex);
 Vue.use(Stringify);
 
-new Vue({
+
+ new Vue({
+
   vuetify,
   router,
   store,

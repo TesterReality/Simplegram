@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-app :style="{background: $vuetify.theme.themes.dark.background}">
-        <v-container fluid >
+        <v-container fluid>
             <v-row>
                 <v-col cols="12" sm="3" class="border">
 
@@ -114,52 +114,56 @@
                         </v-toolbar-title>
                         <v-spacer></v-spacer>
                     </v-app-bar>
-                    <v-virtual-scroll
-                            :items="myMessage"
-                            :item-height="250"
-                            height="300"
+                    <v-col
+                            cols="auto"
+                            class="flex-grow-1 flex-shrink-0"
                     >
-                        <template v-slot:default="{ msg }">
-                            <!--Если я отправил who=1 - от меня сообщение-->
-                            <v-app-bar color="rgba(0,0,0,0)" flat class="mb-16">
-
-                                <v-spacer></v-spacer>
-                                <v-card class="mt-10 mr-2" max-width="350px" color="blue" dark>
-                                    <v-list-item three-line>
-                                        <v-list-item-content>
-                                            <div class=" mb-4">
-                                                {{ msg.text }}
-                                            </div>
-                                            <v-list-item-subtitle> {{ msg.when }} <span class="ml-16">Просмотрено</span></v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card >
-                            </v-app-bar>
-
-                            <!--Если я отправил who=0 - сообщение мне-->
-                            <v-app-bar color="rgba(0,0,0,0)" flat class="mb-16">
-                                <v-spacer></v-spacer>
-                                <v-card class="mt-10 " max-width="350px">
-                                    <v-list-item three-line>
-                                        <v-list-item-content>
-                                            <div class=" mb-4">
-                                                {{ msg.text }}
-                                            </div>
-                                            <v-list-item-subtitle>{{ msg.when }}</v-list-item-subtitle>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                </v-card >
-                                <v-btn
-                                        color="black"
-                                        icon
-                                        class="mb-n10"
-                                >
-                                    <v-icon>fas fa-ellipsis-h</v-icon>
-                                </v-btn>
-                            </v-app-bar>
-
-                        </template>
-                    </v-virtual-scroll>
+                        <v-responsive
+                                class="overflow-y-hidden fill-height"
+                                height="500"
+                        >
+                            <v-card
+                                    flat
+                                    class="d-flex flex-column fill-height"
+                            >
+                                <v-card-text class="flex-grow-1 overflow-y-auto">
+                                    <template >
+                                        <div v-for="(msg) in messages" :key="msg" >
+                                        <div
+                                                :class="{ 'd-flex flex-row-reverse': msg.me }"
+                                                style="text-align: initial"
+                                        >
+                                            <v-menu offset-y>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-hover >
+                                                        <v-chip
+                                                                :color="msg.me ? 'primary' : ''"
+                                                                dark
+                                                                style="height:auto;white-space: normal; text-align: start"
+                                                                class="pa-4 mb-8"
+                                                                v-on="on"
+                                                        >
+                                                            {{ msg.text }}
+                                                            <sub
+                                                                    class="ml-2"
+                                                                    style="font-size: 0.5rem;"
+                                                            >{{ msg.when }}</sub>
+                                                        </v-chip>
+                                                    </v-hover>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item>
+                                                        <v-list-item-title>delete</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </div>
+                                        </div>
+                                    </template>
+                                </v-card-text>
+                            </v-card>
+                        </v-responsive>
+                    </v-col>
 
 
                     <v-app-bar color="rgba(0,0,0,0)" flat>
@@ -183,6 +187,23 @@
     </v-app>
 </template>
 <script>
+    import Vue from 'vue';
+
+    var app5 = new Vue({
+        data: {
+            messages: [
+                {
+                    text: 'test',
+                    me: false,
+                    when: ''
+                }
+            ]
+        },
+        created(){
+            // send a request to get result, and assign the value to a, b, c here
+
+        },
+    });
     export default {
 
         data: () => ({
@@ -213,9 +234,15 @@
 
             messages:
                 [
-                    { text: 'Home', who: 1, when: "24.01.2022" },
-                    { text: 'My Account', who: -1,when: "24.01.2022" },
-                    { text: 'Users', who: 1,when: "24.01.2022" },
+                    { text: 'Home', me: true, when: "24.01.2022" },
+                    { text: 'My Account', me: false,when: "24.01.2022" },
+                    { text: 'Users', me: true,when: "24.01.2022" },
+                    { text: 'Home', me: true, when: "24.01.2022" },
+                    { text: 'My Account', me: false,when: "24.01.2022" },
+                    { text: 'Users', me: true,when: "24.01.2022" },
+                    { text: 'Home', me: true, when: "24.01.2022" },
+                    { text: 'My Account', me: false,when: "24.01.2022" },
+                    { text: 'Users', me: true,when: "24.01.2022" },
                 ],
             password: 'Password',
             show: false,
@@ -233,14 +260,17 @@
                 return this.$vuetify.theme.dark ? "dark" : "light";
             },
             myMessage () {
+//item,index
+                return Array.from({ length: 2 }, (v,k) => {
 
-                return Array.from({ length: 2 }, () => {
-                    let whoSender = "-1";
-                    console.log(whoSender);
+                    let whoSender = false;
+                    app5.messages.push(this.messages[k]);
+                    console.log(app5.messages);
+                    //console.log(vm.$messages);
                     return {
-                        text:'${this.messages[v].text}',
-                        when:'${this.messages[v].when}',
-                        who: '${whoSender}'
+                        text:app5.messages[1].text,
+                        when:app5.messages[1].when,
+                        who: whoSender
                     }
                 })
             }
