@@ -86,7 +86,7 @@
         },
         created() {
             if (this.loggedIn) {
-                this.$router.push('/about');
+                this.$router.push('/');
             }
         },
         methods: {
@@ -104,7 +104,7 @@
                     if (this.user.login && this.user.password) {
                         this.$store.dispatch('auth/login', this.user).then(
                             () => {
-                                this.$router.push('/profile');
+                                this.$router.push('/');
                             },
                             error => {
                                 this.loading = false;

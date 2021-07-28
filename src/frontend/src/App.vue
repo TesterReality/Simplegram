@@ -1,20 +1,17 @@
 <template>
-    <div id="app">
-        <div id="nav">
-            <router-link to="/">Home</router-link>
-            |
-            <router-link to="/about">About</router-link>
+    <v-app>
+        <v-main>
+            <router-view></router-view>
+        </v-main>
+    </v-app>
+          <!--  <v-btn @click="logOut">Выйти</v-btn>-->
 
-            <v-btn @click="logOut">Выйти</v-btn>
-
-        </div>
-        <router-view/>
-    </div>
 </template>
 
 <script>
+
     export default {
-        name: 'Home',
+        name: 'App',
         computed: {
             loggedIn() {
                 return this.$store.state.auth.status.loggedIn;
