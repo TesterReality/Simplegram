@@ -127,15 +127,15 @@ public class AuthController {
         if (signupRequest.getFile() != null) {
             try {
 
-                String pathToUserAvatrs = uploadsDir+"avatars/";
+                String pathToUserAvatrs = uploadsDir + "avatars/";
                 String orgName = signupRequest.getFile().getOriginalFilename();
                 File dirUpload = new File(pathToUserAvatrs);
                 File f = new File(dirUpload.getAbsolutePath());
-                if(!f.exists()) {
+                if (!f.exists()) {
                     f.mkdirs();
                 }
-                String fullAvatarName = DigestUtils.md5Hex(signupRequest.getLogin())+"."+getFileExtension(orgName);
-                File f1 = new File(dirUpload.getAbsolutePath()+"/"+fullAvatarName);
+                String fullAvatarName = DigestUtils.md5Hex(signupRequest.getLogin()) + "." + getFileExtension(orgName);
+                File f1 = new File(dirUpload.getAbsolutePath() + "/" + fullAvatarName);
 
                 try (OutputStream os = new FileOutputStream(f1)) {
                     os.write(signupRequest.getFile().getBytes());
@@ -146,11 +146,10 @@ public class AuthController {
                 //Если не удалось записать файл
                 e.printStackTrace();
             }
-        }else
-        {
+        } else {
             //значит пользователь не загрузил аватарку, но мы получили от него url изображения с ресурса
-            new ImgRegUrl(signupRequest.getImgUrl(),user.getLogin(),uploadsDir).loadAvatarFromUrl();
-            user.setAvatar(user.getAvatar()+".png");
+            new ImgRegUrl(signupRequest.getImgUrl(), user.getLogin(), uploadsDir).loadAvatarFromUrl();
+            user.setAvatar(user.getAvatar() + ".png");
         }
         userRepository.save(user);
 
@@ -159,8 +158,8 @@ public class AuthController {
 
     //метод определения расширения файла
     private static String getFileExtension(String fileName) {
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-            return fileName.substring(fileName.lastIndexOf(".")+1);
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
         else return "";
     }
 }

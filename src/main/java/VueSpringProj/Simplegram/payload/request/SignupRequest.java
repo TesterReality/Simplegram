@@ -26,7 +26,6 @@ public class SignupRequest {
     @Size(min = 6, max = 40)
     private String password;
 
-
     public String getImgUrl() {
         return imgUrl;
     }

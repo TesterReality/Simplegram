@@ -18,7 +18,7 @@ public class ImgRegUrl {
     private String urlImage;
     private String userLogin;
 
-    public ImgRegUrl(String urlImage, String userLogin,String uploadsDir) {
+    public ImgRegUrl(String urlImage, String userLogin, String uploadsDir) {
         this.urlImage = urlImage;
         this.userLogin = userLogin;
         this.uploadsDir = uploadsDir;
@@ -48,7 +48,7 @@ public class ImgRegUrl {
 
     private void saveToAvatarDir(BufferedImage image) {
         String pathToUserAvatrs = uploadsDir + "avatars/";
-        String fileName = DigestUtils.md5Hex(userLogin) +".png";
+        String fileName = DigestUtils.md5Hex(userLogin) + ".png";
         File dirUpload = new File(pathToUserAvatrs);
         File f = new File(dirUpload.getAbsolutePath());
         if (!f.exists()) {

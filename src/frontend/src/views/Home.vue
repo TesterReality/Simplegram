@@ -129,7 +129,7 @@
                             >
                                 <v-card-text class="flex-grow-1 overflow-y-auto">
                                     <template >
-                                        <div v-for="(msg) in messages" :key="msg" >
+                                        <div v-for="(msg) in messages" :key="msg.when" >
                                         <div
                                                 :class="{ 'd-flex flex-row-reverse': msg.me }"
                                                 style="text-align: initial"
@@ -184,11 +184,49 @@
                     </v-app-bar>
                 </v-col>
             </v-row>
+
+
+
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit" :disabled="connected == true" @click.prevent="connect">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" :disabled="connected == false" @click.prevent="disconnect">Disconnect
+                    </button>
+                </div>
+            </form>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" v-model="send_message" placeholder="Your name here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit" @click.prevent="send">Send</button>
+            </form>
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="conversation" class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Greetings</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="itemos in received_messages" :key="itemos">
+                            <td>{{ itemos }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </v-container>
     </v-app>
 </template>
 <script>
     import Vue from 'vue';
+    import SockJS from "sockjs-client";
+    import Stomp from "webstomp-client";
+    import UserService from '../services/user.service';
+    import authHeader from '../services/auth-header';
 
     var app5 = new Vue({
         data: {
@@ -235,15 +273,15 @@
 
             messages:
                 [
+                    { text: 'Home', me: true, when: "21.01.2022" },
+                    { text: 'My Account', me: false,when: "22.01.2022" },
+                    { text: 'Users', me: true,when: "23.01.2022" },
                     { text: 'Home', me: true, when: "24.01.2022" },
-                    { text: 'My Account', me: false,when: "24.01.2022" },
-                    { text: 'Users', me: true,when: "24.01.2022" },
-                    { text: 'Home', me: true, when: "24.01.2022" },
-                    { text: 'My Account', me: false,when: "24.01.2022" },
-                    { text: 'Users', me: true,when: "24.01.2022" },
-                    { text: 'Home', me: true, when: "24.01.2022" },
-                    { text: 'My Account', me: false,when: "24.01.2022" },
-                    { text: 'Users', me: true,when: "24.01.2022" },
+                    { text: 'My Account', me: false,when: "25.01.2022" },
+                    { text: 'Users', me: true,when: "26.01.2022" },
+                    { text: 'Home', me: true, when: "27.01.2022" },
+                    { text: 'My Account', me: false,when: "28.01.2022" },
+                    { text: 'Users', me: true,when: "29.01.2022" },
                 ],
             password: 'Password',
             show: false,
@@ -252,7 +290,12 @@
             iconIndex: 0,
             //для toggle-navigation-drawers
             drawer: false,
-            group: null
+            group: null,
+
+            //sockJS
+            received_messages: [],
+            send_message: null,
+            connected: false
 
 
         }),
@@ -277,6 +320,19 @@
             }
 
         },
+        mounted() {
+            UserService.test().then(
+                response => {
+                    this.content = response.data;
+                },
+                error => {
+                    this.content =
+                        (error.response && error.response.data && error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+                }
+            );
+        },
         methods: {
             sendMessage () {
                 this.resetIcon()
@@ -293,8 +349,47 @@
             logOut() {
                 this.$store.dispatch('auth/logout');
                 this.$router.push('/login');
+            },
+            //sockJS
+            send() {
+                console.log("Send message:" + this.send_message);
+                if (this.stompClient && this.stompClient.connected) {
+                    const msg = { name: this.send_message };
+                    console.log(JSON.stringify(msg));
+                    this.stompClient.send("/app/hello", JSON.stringify(msg), {});
+                }
+            },
+            connect() {
+
+                this.socket = new SockJS("http://localhost:8080/gs-guide-websocket");
+                this.stompClient = Stomp.over(this.socket, authHeader());
+                this.stompClient.connect(
+                    {},
+                    frame => {
+                        this.connected = true;
+                        console.log(frame);
+                        this.stompClient.subscribe("/topic/greetings", tick => {
+                            console.log(tick);
+                            this.received_messages.push(JSON.parse(tick.body,).content);
+
+                        });
+                    },
+                    error => {
+                        console.log(error);
+                        this.connected = false;
+                    }
+                );
+            },
+            disconnect() {
+                if (this.stompClient) {
+                    this.stompClient.disconnect();
+                }
+                this.connected = false;
+            },
+            tickleConnection() {
+                this.connected ? this.disconnect() : this.connect();
             }
-        },
+        }
 
     };
 </script>

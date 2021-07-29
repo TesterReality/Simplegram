@@ -6,7 +6,7 @@ import java.util.UUID;
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
-    private UUID id;//uuid
+    private UUID id;
     private String username;
     private String login;
     private String avatar;
@@ -17,7 +17,7 @@ public class JwtResponse {
         this.id = id;
         this.username = username;
         this.login = login;
-        this.avatar=avatar;
+        this.avatar = avatar;
         this.roles = roles;
     }
 

@@ -73,21 +73,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**","/avatars/**").permitAll()
+                .antMatchers("/api/test/**", "/avatars/**", "/gs-guide-websocket/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
     @Override
     //Раздаем ресурсы по ссылке
-    public void addResourceHandlers(ResourceHandlerRegistry registry)
-    {
-        String pathToUserAvatrs = uploadsDir+"avatars/";
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String pathToUserAvatrs = uploadsDir + "avatars/";
         File dirUpload = new File(pathToUserAvatrs);
         String path = dirUpload.getAbsolutePath();
         System.out.println(path);
         registry.addResourceHandler("/avatars/**")
-                .addResourceLocations("file:"+path+"/")
-                            .setCachePeriod(0);
+                .addResourceLocations("file:" + path + "/")
+                .setCachePeriod(0);
 
     }
 }

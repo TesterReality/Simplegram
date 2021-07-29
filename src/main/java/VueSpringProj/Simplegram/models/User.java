@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(	name = "users",
+@Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "login")
         })
@@ -41,14 +41,13 @@ public class User {
     private String avatar;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "user_roles",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
-
 
     public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 20) String login, @NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 140) String avatar) {
         this.username = username;
