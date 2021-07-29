@@ -80,6 +80,7 @@ public class AuthController {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getLogin(),
+                userDetails.getAvatar(),
                 roles));
     }
 

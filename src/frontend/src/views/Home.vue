@@ -11,6 +11,7 @@
                         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
                         <v-toolbar-title>Меню</v-toolbar-title>
+                        <img src="/avatars/cat.png"/>
                     </v-app-bar>
                     <v-navigation-drawer
                             v-model="drawer"
@@ -282,7 +283,9 @@
                 this.clearMessage()
             },
             clearMessage () {
-                this.message = ''
+                this.messages.push({ text: this.message, me: true, when: new Date().toLocaleString() });
+                console.log(this.messages)
+
             },
             resetIcon () {
                 this.iconIndex = 0

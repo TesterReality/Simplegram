@@ -4,6 +4,7 @@ import VueSpringProj.Simplegram.security.jwt.AuthEntryPointJwt;
 import VueSpringProj.Simplegram.security.jwt.AuthTokenFilter;
 import VueSpringProj.Simplegram.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.File;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    @Value("${simplegram.app.uploadPath}")
+    private String uploadsDir;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -66,10 +73,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/test/**").permitAll()
+                .antMatchers("/api/test/**","/avatars/**").permitAll()
                 .anyRequest().authenticated();
-
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+    @Override
+    //Раздаем ресурсы по ссылке
+    public void addResourceHandlers(ResourceHandlerRegistry registry)
+    {
+        String pathToUserAvatrs = uploadsDir+"avatars/";
+        File dirUpload = new File(pathToUserAvatrs);
+        String path = dirUpload.getAbsolutePath();
+        System.out.println(path);
+        registry.addResourceHandler("/avatars/**")
+                .addResourceLocations("file:"+path+"/")
+                            .setCachePeriod(0);
+
     }
 }
 
