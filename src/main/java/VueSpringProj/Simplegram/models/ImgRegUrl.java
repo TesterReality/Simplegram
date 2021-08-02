@@ -1,6 +1,7 @@
 package VueSpringProj.Simplegram.models;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.logging.log4j.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.imageio.ImageIO;
@@ -13,7 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 public class ImgRegUrl {
-
+    private static Logger logger = LogManager.getLogger(ImgRegUrl.class);
     private String uploadsDir;
     private String urlImage;
     private String userLogin;
@@ -39,10 +40,10 @@ public class ImgRegUrl {
             saveToAvatarDir(image);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            System.out.println("Не удалось создать автарку для пользователя");
+            logger.error("Не удалось создать аватарку для пользователя");
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Не удалось загрузить автарку для пользователя");
+            logger.error("Не удалось загрузить аватарку для пользователя");
         }
     }
 
@@ -60,7 +61,7 @@ public class ImgRegUrl {
             ImageIO.write(image, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Не удалось загрузить аватарку с ресурса");
+            logger.error("Не удалось загрузить автарку с ресурса");
         }
     }
 }

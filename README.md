@@ -65,7 +65,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] lombok
 - [ ] ReponseEntity
 - [ ] ModelAttribute -> RequestBody
-- [ ] System.out - @Log4j2
+- [X] System.out - @Log4j2
 - [ ] spring messagesource
 - [ ] все Autowired заменить на private final
 - [ ] удалить Role заменить на Enumeratated

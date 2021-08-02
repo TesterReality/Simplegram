@@ -84,7 +84,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         String pathToUserAvatrs = uploadsDir + "avatars/";
         File dirUpload = new File(pathToUserAvatrs);
         String path = dirUpload.getAbsolutePath();
-        System.out.println(path);
         registry.addResourceHandler("/avatars/**")
                 .addResourceLocations("file:" + path + "/")
                 .setCachePeriod(0);
