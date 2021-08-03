@@ -61,7 +61,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] insert тоже через миграции
 - [X] maven -> gradle
 - [ ] models -> entity
-- [ ] фикс названия пакетов
+- [X] фикс названия пакетов
 - [X] lombok
 - [ ] ReponseEntity
 - [ ] ModelAttribute -> RequestBody
@@ -73,6 +73,8 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] @Value заменить на ApplicationConfiguration
 - [ ] кастомные exception + @ExceptionAdvice
 - [ ] адвайс для валидации
+- [ ] исправить gradle
+- [ ] убрать webjars
 
 Сейчас соединение по SockJs устанавливается в тестовом режиме (просто, что оно есть):
 [![Simplegram](https://thumb.cloud.mail.ru/weblink/thumb/xw1/aray/6orn3HUDy/Screenshot_5.jpg)]()

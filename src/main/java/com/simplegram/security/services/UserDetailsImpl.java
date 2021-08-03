@@ -1,16 +1,14 @@
 package com.simplegram.security.services;
 
+import com.simplegram.models.ERole;
 import com.simplegram.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -26,35 +24,30 @@ public class UserDetailsImpl implements UserDetails {
 
     private String avatar;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
     public UserDetailsImpl(UUID id, String username, String login, String password, String avatar,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           String role) {
         this.id = id;
         this.username = username;
         this.login = login;
         this.password = password;
         this.avatar = avatar;
-        this.authorities = authorities;
+        this.role = role;
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
 
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getLogin(),
                 user.getPassword(),
-                user.getAvatar(),
-                authorities);
+                user.getAvatar(), ERole.ROLE_USER.toString());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    public String getRole() {
+        return role;
     }
 
     public UUID getId() {
@@ -63,6 +56,11 @@ public class UserDetailsImpl implements UserDetails {
 
     public String getLogin() {
         return login;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     @Override

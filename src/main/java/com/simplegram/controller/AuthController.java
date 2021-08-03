@@ -2,13 +2,11 @@ package com.simplegram.controller;
 
 import com.simplegram.models.ERole;
 import com.simplegram.models.ImgRegUrl;
-import com.simplegram.models.Role;
 import com.simplegram.models.User;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import com.simplegram.payload.response.JwtResponse;
 import com.simplegram.payload.response.MessageResponse;
-import com.simplegram.repository.RoleRepository;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.jwt.JwtUtils;
 import com.simplegram.security.services.UserDetailsImpl;
@@ -30,6 +28,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,9 +46,6 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -71,9 +68,8 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        List<String> roles = new ArrayList<String>();
+        roles.add(userDetails.getRole());
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -89,39 +85,16 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Ошибка! Такой лоигн уже занят"));
+                    .body(new MessageResponse("{error.loginBusy}"));
         }
 
         // Создаем новый аккаунт
         User user = new User(signupRequest.getUsername(),
                 signupRequest.getLogin(),
                 encoder.encode(signupRequest.getPassword()),
-                DigestUtils.md5Hex(signupRequest.getLogin()));
+                DigestUtils.md5Hex(signupRequest.getLogin()),
+                new Timestamp(System.currentTimeMillis()));
 
-        Set<String> strRoles = signupRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Ошибка. Роль не найдена"));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Ошибка. Роль не найдена"));
-                        roles.add(adminRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Ошибка. Роль не найдена"));
-                        roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
 
         if (signupRequest.getFile() != null) {
             try {

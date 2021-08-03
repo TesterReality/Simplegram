@@ -1,12 +1,7 @@
 databaseChangeLog:
 #https://github.com/spring-projects/spring-boot/issues/16888 - includeAll not working
-  - include:
-      file: classpath:liquibase/app_1_create_table_role.yml
-  - include:
-      file: classpath:liquibase/app_1_create_table_user_roles.yml
+
   - include:
       file: classpath:liquibase/app_1_create_table_users.yml
-  - include:
-      file: classpath:liquibase/app_1_insert_data_to_table_role.yml
   - include:
       file: classpath:liquibase/app_1_add_column_to_user_table.yml

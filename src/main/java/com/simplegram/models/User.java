@@ -1,9 +1,10 @@
 package com.simplegram.models;
 
 import org.hibernate.annotations.GenericGenerator;
-
+import java.sql.Timestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,20 +41,19 @@ public class User {
     @Size(max = 140)
     private String avatar;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @NotNull
+    private Timestamp online_data;
 
     public User() {
     }
 
-    public User(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 20) String login, @NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 140) String avatar) {
+
+    public User(String username, String login, String password, String avatar, Timestamp online_data) {
         this.username = username;
         this.login = login;
         this.password = password;
         this.avatar = avatar;
+        this.online_data = online_data;
     }
 
     public UUID getId() {
@@ -88,13 +88,6 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 
     public String getAvatar() {
         return avatar;
@@ -102,5 +95,13 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Timestamp getOnline_data() {
+        return online_data;
+    }
+
+    public void setOnline_data(Timestamp online_data) {
+        this.online_data = online_data;
     }
 }
