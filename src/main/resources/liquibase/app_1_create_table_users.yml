@@ -1,0 +1,40 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-1
+      author: vlad
+      changes:
+        - createTable:
+            tableName: users
+            remarks: Пользователи
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: users_pkey
+                    nullable: false
+              - column:
+                  name: avatar
+                  type: varchar(255)
+                  remarks: Название файла с изображение профиля
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: login
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
