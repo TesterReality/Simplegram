@@ -1,0 +1,15 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-6
+      author: vlad
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: online_data
+                  type: timestamp without time zone
+                  defaultValue: now()
+                  constraints:
+                    nullable: false
