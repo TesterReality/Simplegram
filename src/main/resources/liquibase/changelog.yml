@@ -4,4 +4,4 @@ databaseChangeLog:
   - include:
       file: classpath:liquibase/app_1_create_table_users.yml
   - include:
-      file: classpath:liquibase/app_1_add_column_to_user_table.yml
+      file: classpath:liquibase/app_2_add_column_to_user_table.yml
