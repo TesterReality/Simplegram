@@ -1,0 +1,23 @@
+simplegram:
+  app:
+    jwtExpirationMs: 86400000
+    jwtSecret: SimplegramSecretKey
+    uploadPath: uploads/
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: postgres
+    password: qwerty3
+  jpa:
+    properties:
+      generate-ddl: true
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        show_sql: false
+        ddl-auto: update
+        temp:
+          use_jdbc_metadata_defaults: false
+  liquibase:
+    enabled: true
+    change-log: classpath:liquibase/changelog.yml

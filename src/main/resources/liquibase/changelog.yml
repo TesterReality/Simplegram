@@ -1,0 +1,91 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-1
+      author: vlad
+      changes:
+        - createTable:
+            tableName: users
+            remarks: Пользователи
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: users_pkey
+                    nullable: false
+              - column:
+                  name: avatar
+                  type: varchar(255)
+                  remarks: Название файла с изображение профиля
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: login
+                  type: varchar(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: roles
+            remarks: Роли для пользователей
+            columns:
+              - column:
+                  name: id
+                  type: int4
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: roles_pkey
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: ROLE_USER
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: ROLE_ADMIN
+        - createTable:
+            tableName: user_roles
+            remarks: Связь пользователей и ролей
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: chapter_pk
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: int4
+                  constraints:
+                    nullable: false

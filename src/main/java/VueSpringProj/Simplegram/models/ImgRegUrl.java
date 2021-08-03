@@ -1,7 +1,6 @@
 package VueSpringProj.Simplegram.models;
 
 import lombok.extern.log4j.Log4j2;
-
 import org.apache.commons.codec.digest.DigestUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -14,7 +13,6 @@ import java.net.URLConnection;
 
 @Log4j2
 public class ImgRegUrl {
- //   private static Logger logger = LogManager.getLogger(ImgRegUrl.class);
     private String uploadsDir;
     private String urlImage;
     private String userLogin;
@@ -23,8 +21,6 @@ public class ImgRegUrl {
         this.urlImage = urlImage;
         this.userLogin = userLogin;
         this.uploadsDir = uploadsDir;
-        log.error("Something else is wrong here");
-
     }
 
     public void loadAvatarFromUrl() {

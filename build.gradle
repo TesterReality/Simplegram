@@ -30,6 +30,9 @@ dependencies {
     // https://projectlombok.org
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    // https://mvnrepository.com/artifact/org.liquibase/liquibase-core
+    implementation 'org.liquibase:liquibase-core:4.4.2'
+
 }
 
 description = 'SimplegramGradle'
