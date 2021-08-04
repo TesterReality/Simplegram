@@ -2,23 +2,27 @@ package com.simplegram.security.jwt;
 
 import com.simplegram.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Locale;
 
+@Log4j2
 @Component
 public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-
     @Value("${simplegram.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${simplegram.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    @Autowired
+    private MessageSource messageSource;
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -41,15 +45,20 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
+            log.error(messageSource.getMessage("error.JWTsignature",
+                    null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            log.error(messageSource.getMessage("error.JWTtoken",
+                    null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            log.error(messageSource.getMessage("error.JWTtokenExpired",
+                    null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            log.error(messageSource.getMessage("error.JWTtokenUnsupported",
+                    null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            log.error(messageSource.getMessage("error.JWTempty",
+                    null, Locale.ENGLISH) + ": {}", e.getMessage());
         }
         return false;
     }

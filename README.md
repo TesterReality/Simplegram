@@ -66,7 +66,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] ReponseEntity
 - [ ] ModelAttribute -> RequestBody
 - [X] System.out - @Log4j2
-- [ ] spring messagesource
+- [X] spring messagesource
 - [ ] все Autowired заменить на private final
 - [ ] удалить Role заменить на Enumeratated
 - [X] application.properties -> yaml

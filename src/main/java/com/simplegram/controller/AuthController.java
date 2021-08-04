@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,14 +31,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+@ComponentScan(basePackages = "com.simplegram")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -55,6 +55,9 @@ public class AuthController {
 
     @Value("${simplegram.app.uploadPath}")
     private String uploadsDir;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private final static Logger log = LoggerFactory.getLogger(AuthController.class);
 
@@ -85,7 +88,8 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("{error.loginBusy}"));
+                    .body(new MessageResponse(messageSource.getMessage("error.loginBusy",
+                            null, Locale.ENGLISH)));
         }
 
         // Создаем новый аккаунт
@@ -125,7 +129,8 @@ public class AuthController {
         }
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Пользователь успешно зарегистрирован!"));
+        return ResponseEntity.ok(new MessageResponse(messageSource.getMessage("success.registration",
+                null, Locale.ENGLISH)));
     }
 
     //метод определения расширения файла

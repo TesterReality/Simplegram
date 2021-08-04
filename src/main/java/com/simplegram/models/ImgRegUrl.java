@@ -2,6 +2,8 @@ package com.simplegram.models;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,12 +12,16 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 
 @Log4j2
 public class ImgRegUrl {
     private String uploadsDir;
     private String urlImage;
     private String userLogin;
+
+    @Autowired
+    private MessageSource messageSource;
 
     public ImgRegUrl(String urlImage, String userLogin, String uploadsDir) {
         this.urlImage = urlImage;
@@ -38,10 +44,12 @@ public class ImgRegUrl {
             saveToAvatarDir(image);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            log.error("Surcharge Calculation begins");
+            log.error(messageSource.getMessage("error.urlAvatar",
+                    null, Locale.ENGLISH));
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("Не удалось загрузить аватарку для пользователя");
+            log.error(messageSource.getMessage("error.loadAvatars",
+                    null, Locale.ENGLISH));
         }
     }
 
@@ -59,7 +67,8 @@ public class ImgRegUrl {
             ImageIO.write(image, "png", outputfile);
         } catch (IOException e) {
             e.printStackTrace();
-            log.error("Не удалось загрузить аватарку с ресурса");
+            log.error(messageSource.getMessage("error.loadAvatarWithResource",
+                    null, Locale.ENGLISH));
         }
     }
 }
