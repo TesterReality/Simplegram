@@ -129,8 +129,8 @@ public class AuthController {
         }
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse(messageSource.getMessage("success.registration",
-                null, Locale.ENGLISH)));
+        return ResponseEntity.ok(messageSource.getMessage("success.registration",
+                null, Locale.ENGLISH));
     }
 
     //метод определения расширения файла

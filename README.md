@@ -56,14 +56,14 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] Возможность создавать группы контактов
 - [ ] Перенести БД на Hibernate (случайно начал использвовать Spring Data Jpa)
 
-**Новые задачи (по состоянию на 02.08.21)**
+**Новые задачи (по состоянию на 04.08.21)**
 - [X] миграции через liquibase в yml
 - [X] insert тоже через миграции
 - [X] maven -> gradle
 - [X] models -> entity
 - [X] фикс названия пакетов
 - [X] lombok
-- [ ] ReponseEntity
+- [X] ResponseEntity
 - [ ] ModelAttribute -> RequestBody
 - [X] System.out - @Log4j2
 - [X] spring messagesource

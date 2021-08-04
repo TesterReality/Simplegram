@@ -210,7 +210,8 @@
 
                         this.$store.dispatch('auth/register',this.formdata).then(
                             data => {
-                                this.message = data.message;
+                                this.message = data;
+                                console.log(data);
                                 this.successful = true;
                             },
                             error => {
