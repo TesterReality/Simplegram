@@ -1,6 +1,6 @@
 package com.simplegram.repository;
 
-import com.simplegram.models.User;
+import com.simplegram.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.simplegram.security.jwt;
 
-import com.simplegram.security.services.UserDetailsServiceImpl;
+import com.simplegram.services.UserDetailsServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

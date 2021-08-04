@@ -198,7 +198,7 @@
                         {
                             //значит передает ссылку а бек разбирается
                             this.formdata = new FormData();
-                            this.formdata.append('imgUrl',this.imageURL);
+                            //this.formdata.append('imgUrl',this.imageURL);
                         }
                        this.formdata.append('username',this.user.username);
                        this.formdata.append('login',this.user.login);

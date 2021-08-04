@@ -8,7 +8,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: online_data
+                  name: online_date
                   type: timestamp without time zone
                   defaultValue: now()
                   constraints:

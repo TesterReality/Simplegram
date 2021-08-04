@@ -1,15 +1,14 @@
 package com.simplegram.controller;
 
-import com.simplegram.models.ERole;
-import com.simplegram.models.ImgRegUrl;
-import com.simplegram.models.User;
+import com.simplegram.security.services.UserDetailsImpl;
+import com.simplegram.entity.User;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import com.simplegram.payload.response.JwtResponse;
 import com.simplegram.payload.response.MessageResponse;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.jwt.JwtUtils;
-import com.simplegram.security.services.UserDetailsImpl;
+import com.simplegram.services.ImageGenerationService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +23,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -52,6 +50,9 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    ImageGenerationService imageGenerationService;
 
     @Value("${simplegram.app.uploadPath}")
     private String uploadsDir;
@@ -93,11 +94,11 @@ public class AuthController {
         }
 
         // Создаем новый аккаунт
-        User user = new User(signupRequest.getUsername(),
-                signupRequest.getLogin(),
-                encoder.encode(signupRequest.getPassword()),
-                DigestUtils.md5Hex(signupRequest.getLogin()),
-                new Timestamp(System.currentTimeMillis()));
+        User user = new User();
+        user.setUsername(signupRequest.getUsername());
+        user.setLogin(signupRequest.getLogin());
+        user.setPassword(encoder.encode(signupRequest.getPassword()));
+        user.setOnlineDate(LocalDateTime.now());
 
 
         if (signupRequest.getFile() != null) {
@@ -124,8 +125,7 @@ public class AuthController {
             }
         } else {
             //значит пользователь не загрузил аватарку, но мы получили от него url изображения с ресурса
-            new ImgRegUrl(signupRequest.getImgUrl(), user.getLogin(), uploadsDir).loadAvatarFromUrl();
-            user.setAvatar(user.getAvatar() + ".png");
+            user.setAvatar(imageGenerationService.loadAvatarFromUrl(user.getLogin(), uploadsDir));
         }
         userRepository.save(user);
 

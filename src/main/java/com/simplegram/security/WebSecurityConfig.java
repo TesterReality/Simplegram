@@ -2,7 +2,7 @@ package com.simplegram.security;
 
 import com.simplegram.security.jwt.AuthEntryPointJwt;
 import com.simplegram.security.jwt.AuthTokenFilter;
-import com.simplegram.security.services.UserDetailsServiceImpl;
+import com.simplegram.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

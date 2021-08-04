@@ -1,4 +1,4 @@
-package com.simplegram.models;
+package com.simplegram.entity;
 
 public enum ERole {
     ROLE_USER,

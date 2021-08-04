@@ -10,7 +10,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: uuid
+                  type: varchar(255)
                   constraints:
                     primaryKey: true
                     primaryKeyName: users_pkey

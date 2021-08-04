@@ -60,7 +60,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] миграции через liquibase в yml
 - [X] insert тоже через миграции
 - [X] maven -> gradle
-- [ ] models -> entity
+- [X] models -> entity
 - [X] фикс названия пакетов
 - [X] lombok
 - [ ] ReponseEntity
@@ -68,7 +68,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] System.out - @Log4j2
 - [X] spring messagesource
 - [ ] все Autowired заменить на private final
-- [ ] удалить Role заменить на Enumeratated
+- [X] удалить Role заменить на Enumeratated
 - [X] application.properties -> yaml
 - [ ] @Value заменить на ApplicationConfiguration
 - [ ] кастомные exception + @ExceptionAdvice
