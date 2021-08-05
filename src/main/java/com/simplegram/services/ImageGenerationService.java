@@ -1,12 +1,10 @@
 package com.simplegram.services;
 
+import com.simplegram.config.ConfigProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -26,18 +24,17 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Log4j2
 @Component
-@ConfigurationProperties("img")
 public class ImageGenerationService {
 
     private final MessageSource messageSource;
-    private String imageGenerator;
+    private final ConfigProperties config;
 
     public String loadAvatarFromUrl(String userLogin, String uploadsDir) {
         URLConnection uc = null;
         URL url = null;
         InputStream urlStream = null;
         try {
-            url = new URL(imageGenerator + "/" + userLogin + ".png");
+            url = new URL(config.getImageGenerator() + "/" + userLogin + ".png");
             uc = url.openConnection();
             uc.setRequestProperty("User-Agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");

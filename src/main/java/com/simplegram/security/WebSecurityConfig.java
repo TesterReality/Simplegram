@@ -1,14 +1,12 @@
 package com.simplegram.security;
 
+import com.simplegram.config.ConfigProperties;
 import com.simplegram.security.jwt.AuthEntryPointJwt;
 import com.simplegram.security.jwt.AuthTokenFilter;
 import com.simplegram.services.UserDetailsServiceImpl;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,14 +34,12 @@ import java.io.File;
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
-@ConfigurationProperties("path")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final AuthTokenFilter authTokenFilter;
-    private String uploadPath;
-
+    private final ConfigProperties config;
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -81,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Override
     //Раздаем ресурсы по ссылке
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String pathToUserAvatrs = uploadPath + "avatars/";
+        String pathToUserAvatrs = config.getUploadPath() + "avatars/";
         File dirUpload = new File(pathToUserAvatrs);
         String path = dirUpload.getAbsolutePath();
         registry.addResourceHandler("/avatars/**")

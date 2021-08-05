@@ -1,12 +1,8 @@
-path:
-    uploadPath: uploads/
-
-img:
-    imageGenerator: https://api.multiavatar.com
-
-jwt:
-  jwtExpirationMs: 86400000
-  jwtSecret: SimplegramSecretKey
+application:
+  upload-path: uploads/
+  jwt-expirationMs: 86400000
+  jwt-secret: SimplegramSecretKey
+  image-generator: https://api.multiavatar.com
 
 spring:
   datasource:
