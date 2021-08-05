@@ -56,7 +56,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] Возможность создавать группы контактов
 - [ ] Перенести БД на Hibernate (случайно начал использвовать Spring Data Jpa)
 
-**Новые задачи (по состоянию на 04.08.21)**
+**Новые задачи (по состоянию на 05.08.21)**
 - [X] миграции через liquibase в yml
 - [X] insert тоже через миграции
 - [X] maven -> gradle
@@ -64,7 +64,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] фикс названия пакетов
 - [X] lombok
 - [X] ResponseEntity
-- [ ] ModelAttribute -> RequestBody
+- [X] ModelAttribute -> RequestBody (сделал RequestPart)
 - [X] System.out - @Log4j2
 - [X] spring messagesource
 - [ ] все Autowired заменить на private final
@@ -75,6 +75,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [ ] адвайс для валидации
 - [ ] исправить gradle
 - [ ] убрать webjars
+- [ ] загрузка языка при помощи Spring
 
 Сейчас соединение по SockJs устанавливается в тестовом режиме (просто, что оно есть):
 [![Simplegram](https://thumb.cloud.mail.ru/weblink/thumb/xw1/aray/6orn3HUDy/Screenshot_5.jpg)]()

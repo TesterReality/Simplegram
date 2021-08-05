@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class SignupRequest {
-    private MultipartFile file;
 
     @NotBlank
     @Size(min = 3, max = 20)

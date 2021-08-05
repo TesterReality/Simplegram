@@ -18,27 +18,29 @@
                             <v-window>
                                 <v-window-item>
                                     <v-card-text>
-                                        <v-card-text class="text-center" >
+                                        <v-card-text class="text-center">
 
-                                        <div
-                                                v-if="message"
-                                                class="alert"
-                                                :class="successful ? 'alert-success' : 'alert-danger'"
-                                        >{{message}}</div>
+                                            <div
+                                                    v-if="message"
+                                                    class="alert"
+                                                    :class="successful ? 'alert-success' : 'alert-danger'"
+                                            >{{message}}
+                                            </div>
                                         </v-card-text>
 
-                                        <v-form name="form" @submit.prevent >
+                                        <v-form name="form" @submit.prevent>
                                             <v-text-field v-model="user.login"
                                                           v-validate="'required|min:3|max:20'"
                                                           label="Введите Ваш логин" prepend-inner-icon="mdi-account"
                                                           name="login"
-                                                          type="text" class="rounded-lg" outlined @change="loginChange"></v-text-field>
+                                                          type="text" class="rounded-lg" outlined
+                                                          @change="loginChange"></v-text-field>
 
                                             <div
                                                     v-if="submitted && errors.has('login')"
                                                     class="alert-danger"
-                                            >{{errors.first('login')}}</div>
-
+                                            >{{errors.first('login')}}
+                                            </div>
 
 
                                             <v-text-field v-model="user.username"
@@ -58,15 +60,18 @@
 
                                             <v-text-field v-model="user.password"
                                                           v-validate="'required|min:6|max:40'"
-                                                          label="Введите Ваш пароль" name="password" prepend-inner-icon="mdi-lock"
+                                                          label="Введите Ваш пароль" name="password"
+                                                          prepend-inner-icon="mdi-lock"
                                                           type="password" class="rounded-lg" outlined></v-text-field>
                                             <v-text-field label="Повторите пароль" name="password1"
-                                                          prepend-inner-icon="mdi-lock-outline" type="password" class="rounded-lg"
+                                                          prepend-inner-icon="mdi-lock-outline" type="password"
+                                                          class="rounded-lg"
                                                           outlined></v-text-field>
                                             <div
                                                     v-if="submitted && errors.has('password')"
                                                     class="alert-danger"
-                                            >{{errors.first('password')}}</div>
+                                            >{{errors.first('password')}}
+                                            </div>
 
                                             <v-card-text class="text-left">
                                     <span class="caption grey--text text--darken-1">
@@ -76,7 +81,9 @@
                                             <v-flex>
                                                 <v-card-actions>
                                                     <v-card-text class="text-left">
-                                                        <v-btn raised class="primary" @click="onClickFile">Выберите файл</v-btn>
+                                                        <v-btn raised class="primary" @click="onClickFile">Выберите
+                                                            файл
+                                                        </v-btn>
                                                         <input
                                                                 type="file"
                                                                 style="display: none"
@@ -94,8 +101,10 @@
                                                     </v-card-text>
                                                 </v-card-actions>
                                             </v-flex>
-                                            <v-btn class="rounded-lg" color="#000000" x-large block dark @click="handleRegister">
-                                                Зарегистрироваться</v-btn>
+                                            <v-btn class="rounded-lg" color="#000000" x-large block dark
+                                                   @click="handleRegister">
+                                                Зарегистрироваться
+                                            </v-btn>
                                             <v-card-actions class="text--secondary">
                                                 <v-spacer></v-spacer>
                                                 <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
@@ -137,7 +146,7 @@
                 loginText: '',
                 isUserLoadImage: false,
                 filedata: null,
-                formdata:{}
+                formdata: {}
             }
         },
         computed: {
@@ -166,14 +175,14 @@
                 fileReader.addEventListener('load', () => {
                     this.imageURL = fileReader.result;
                 });
-                this.filedata= fileReader.readAsDataURL(file[0]);
+                this.filedata = fileReader.readAsDataURL(file[0]);
                 this.image = file[0];
                 this.isUserLoadImage = true;
 
                 this.formdata = new FormData();
                 let fileFromDate = event.target.files[0];
-                this.formdata.append("file",fileFromDate);
-                console.log ( "File", this.formdata, JSON.stringify ({ 'file': fileFromDate}));
+                this.formdata.append("file", fileFromDate);
+                console.log("File", this.formdata, JSON.stringify({'file': fileFromDate}));
                 console.log(this.formdata);
 
 
@@ -181,9 +190,8 @@
             loginChange(event) {
                 console.log(event);
 
-                if(this.isUserLoadImage == false)
-                {
-                    this.imageURL='https://api.multiavatar.com/'+event+'.png';
+                if (this.isUserLoadImage == false) {
+                    this.imageURL = 'https://api.multiavatar.com/' + event + '.png';
                 }
             },
             handleRegister() {
@@ -194,24 +202,32 @@
                     console.log("Отправляем запрос....");
 
                     if (isValid) {
-                        if(!this.isUserLoadImage)//если пользоватей не загрузил аватарку, ставим с сайта
+                        if (!this.isUserLoadImage)//если пользоватей не загрузил аватарку, ставим с сайта
                         {
                             //значит передает ссылку а бек разбирается
                             this.formdata = new FormData();
                             //this.formdata.append('imgUrl',this.imageURL);
                         }
+                        /*
                        this.formdata.append('username',this.user.username);
                        this.formdata.append('login',this.user.login);
-                        this.formdata.append('password',this.user.password);
-                        console.log("Перед Добавили урл");
+                        this.formdata.append('password',this.user.password);*/
 
+                        this.formdata.append('userData', new Blob([JSON.stringify({
+                            'username': this.user.username,
+                            'login': this.user.login,
+                            'password': this.user.password
+                        })], {
+                            type: "application/json"
+                        }));
 
                         console.log(this.formdata);
 
-                        this.$store.dispatch('auth/register',this.formdata).then(
+                        this.$store.dispatch('auth/register', this.formdata).then(
                             data => {
                                 this.message = data;
                                 console.log(data);
+                                delete this.formdata;
                                 this.successful = true;
                             },
                             error => {
@@ -220,9 +236,10 @@
                                     error.message ||
                                     error.toString();
                                 this.successful = false;
+                                delete this.formdata;
                             }
                         );
-                    }else {
+                    } else {
                         console.log("Не пройдена валидация");
 
                     }
