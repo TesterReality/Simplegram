@@ -3,8 +3,12 @@ package com.simplegram.security;
 import com.simplegram.security.jwt.AuthEntryPointJwt;
 import com.simplegram.security.jwt.AuthTokenFilter;
 import com.simplegram.services.UserDetailsServiceImpl;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,26 +27,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
+@ConfigurationProperties("path")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-
-    @Value("${simplegram.app.uploadPath}")
-    private String uploadsDir;
-
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
+    private final AuthTokenFilter authTokenFilter;
+    private String uploadPath;
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -75,13 +75,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**", "/avatars/**", "/gs-guide-websocket/**").permitAll()
                 .anyRequest().authenticated();
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     //Раздаем ресурсы по ссылке
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String pathToUserAvatrs = uploadsDir + "avatars/";
+        String pathToUserAvatrs = uploadPath + "avatars/";
         File dirUpload = new File(pathToUserAvatrs);
         String path = dirUpload.getAbsolutePath();
         registry.addResourceHandler("/avatars/**")

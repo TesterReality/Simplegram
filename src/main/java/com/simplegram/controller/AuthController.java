@@ -9,10 +9,14 @@ import com.simplegram.payload.response.JwtResponse;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.jwt.JwtUtils;
 import com.simplegram.services.ImageGenerationService;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
@@ -34,31 +38,23 @@ import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @ComponentScan(basePackages = "com.simplegram")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@ConfigurationProperties("path")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
-
-    @Autowired
-    ImageGenerationService imageGenerationService;
-
-    @Value("${simplegram.app.uploadPath}")
-    private String uploadsDir;
-
-    @Autowired
-    private MessageSource messageSource;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+    private final JwtUtils jwtUtils;
+    private final ImageGenerationService imageGenerationService;
+    private final MessageSource messageSource;
+    private String uploadPath;
     private boolean isValidAvatar;
 
     @PostMapping("/signin")
@@ -104,7 +100,7 @@ public class AuthController {
             if (!file.isEmpty()) {
                 try {
                     isValidAvatar = true;
-                    String pathToUserAvatrs = uploadsDir + "avatars/";
+                    String pathToUserAvatrs = uploadPath + "avatars/";
                     String orgName = file.getOriginalFilename();
                     File dirUpload = new File(pathToUserAvatrs);
                     File f = new File(dirUpload.getAbsolutePath());
@@ -125,7 +121,7 @@ public class AuthController {
         }
         if (!isValidAvatar)
             //значит пользователь не загрузил аватарку или с ней что-то не так
-            user.setAvatar(imageGenerationService.loadAvatarFromUrl(user.getLogin(), uploadsDir));
+            user.setAvatar(imageGenerationService.loadAvatarFromUrl(user.getLogin(), uploadPath));
 
         userRepository.save(user);
 

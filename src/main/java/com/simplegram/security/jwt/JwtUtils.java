@@ -2,9 +2,11 @@ package com.simplegram.security.jwt;
 
 import com.simplegram.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -12,20 +14,19 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.Locale;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Log4j2
 @Component
+@ConfigurationProperties("jwt")
 public class JwtUtils {
-    @Value("${simplegram.app.jwtSecret}")
+
     private String jwtSecret;
-
-    @Value("${simplegram.app.jwtExpirationMs}")
     private int jwtExpirationMs;
-
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public String generateJwtToken(Authentication authentication) {
-
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()

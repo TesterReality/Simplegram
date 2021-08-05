@@ -1,9 +1,13 @@
-simplegram:
-  app:
-    jwtExpirationMs: 86400000
-    jwtSecret: SimplegramSecretKey
+path:
     uploadPath: uploads/
+
+img:
     imageGenerator: https://api.multiavatar.com
+
+jwt:
+  jwtExpirationMs: 86400000
+  jwtSecret: SimplegramSecretKey
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver

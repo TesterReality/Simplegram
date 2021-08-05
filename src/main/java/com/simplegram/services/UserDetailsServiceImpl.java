@@ -3,6 +3,7 @@ package com.simplegram.services;
 import com.simplegram.entity.User;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.services.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
+@RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final UserRepository userRepository;
+    private final MessageSource messageSource;
 
     @Override
     @Transactional
@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException(messageSource.getMessage("error.UserLoginNotFound",
-                        null, Locale.ENGLISH)+": " + login));
+                        null, Locale.ENGLISH) + ": " + login));
 
         return UserDetailsImpl.build(user);
     }

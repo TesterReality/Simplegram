@@ -67,10 +67,10 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] ModelAttribute -> RequestBody (сделал RequestPart)
 - [X] System.out - @Log4j2
 - [X] spring messagesource
-- [ ] все Autowired заменить на private final
+- [X] все Autowired заменить на private final
 - [X] удалить Role заменить на Enumeratated
 - [X] application.properties -> yaml
-- [ ] @Value заменить на ApplicationConfiguration
+- [X] @Value заменить на ApplicationConfiguration
 - [ ] кастомные exception + @ExceptionAdvice
 - [ ] адвайс для валидации
 - [ ] исправить gradle
