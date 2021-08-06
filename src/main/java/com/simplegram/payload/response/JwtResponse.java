@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,15 +14,13 @@ public class JwtResponse {
     private String username;
     private String login;
     private String avatar;
-    private List<String> roles;
 
-    public JwtResponse(String token, String id, String username, String login, String avatar, List<String> roles) {
+    public JwtResponse(String token, String id, String username, String login, String avatar) {
         this.token = token;
         this.id = id;
         this.username = username;
         this.login = login;
         this.avatar = avatar;
-        this.roles = roles;
     }
 
     public String getAccessToken() {

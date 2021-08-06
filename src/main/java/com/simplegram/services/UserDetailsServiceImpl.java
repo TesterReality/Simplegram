@@ -4,7 +4,6 @@ import com.simplegram.entity.User;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.services.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

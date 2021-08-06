@@ -1,7 +1,7 @@
 package com.simplegram.security.services;
 
-import com.simplegram.entity.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.simplegram.entity.ERole;
 import com.simplegram.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,24 +9,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 
 @Getter
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private final String id;
 
-    private String username;
+    private final String username;
 
-    private String login;
+    private final String login;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
-    private String avatar;
+    private final String avatar;
 
-    private String role;
+    private final String role;
 
     public UserDetailsImpl(String id, String username, String login, String password, String avatar,
                            String role) {
@@ -52,20 +51,6 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    public String getAvatar() {
-        return avatar;
     }
 
     @Override

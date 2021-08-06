@@ -1,21 +1,23 @@
 package com.simplegram.services;
 
 import com.simplegram.config.ConfigProperties;
+import com.simplegram.exceptions.ImageGenerationException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -29,54 +31,27 @@ public class ImageGenerationService {
     private final MessageSource messageSource;
     private final ConfigProperties config;
 
-    public String loadAvatarFromUrl(String userLogin, String uploadsDir) {
-        URLConnection uc = null;
-        URL url = null;
-        InputStream urlStream = null;
+    public String loadAvatarFromUrl(String userLogin, File userAvatarsDir) {
         try {
-            url = new URL(config.getImageGenerator() + "/" + userLogin + ".png");
-            uc = url.openConnection();
+            URL url = new URL(config.getImageGenerator() + "/" + userLogin + ".png");
+            URLConnection uc = url.openConnection();
             uc.setRequestProperty("User-Agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
             uc.connect();
-            urlStream = uc.getInputStream();
+            String userAvatarName = UUID.randomUUID().toString().concat(".png");
 
-            /*
-            try (InputStream is = uc.getInputStream()) {
-                IOUtils.copy(is, new FileOutputStream("fdsf"));
-            }*/
-
-            BufferedImage image = ImageIO.read(urlStream);
-            return saveToAvatarDir(image, uploadsDir);
+            try (InputStream is = uc.getInputStream();
+                 FileOutputStream out = new FileOutputStream(String.valueOf(Paths.get(userAvatarsDir.getAbsolutePath(), userAvatarName)))) {
+                IOUtils.copy(is, out);
+            }
+            return userAvatarName;
         } catch (MalformedURLException e) {
             log.error(e, e);
         } catch (IOException e) {
-            e.printStackTrace();
             log.error(messageSource.getMessage("error.loadAvatars",
                     null, Locale.ENGLISH));
         }
-        return null;
-    }
-
-    private String saveToAvatarDir(BufferedImage image, String uploadsDir) {
-        String pathToUserAvatrs = uploadsDir + "avatars/";
-        String fileName = UUID.randomUUID().toString() + ".png";
-        File dirUpload = new File(pathToUserAvatrs);
-        File f = new File(dirUpload.getAbsolutePath());
-        if (!f.exists()) {
-            f.mkdirs();
-        }
-
-        File outputfile = new File(dirUpload.getAbsolutePath() + "/" + fileName);
-        try {
-            ImageIO.write(image, "png", outputfile);
-            return fileName;
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO: 04.08.2021 logs without translation
-            log.error(messageSource.getMessage("error.loadAvatarWithResource",
-                    null, Locale.ENGLISH));
-        }
-        return null;
+        throw new ImageGenerationException(messageSource.getMessage("exception.imageGeneratedException",
+                null, Locale.ENGLISH));
     }
 }
