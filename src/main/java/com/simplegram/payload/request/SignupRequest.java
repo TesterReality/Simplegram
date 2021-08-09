@@ -3,6 +3,7 @@ package com.simplegram.payload.request;
 import lombok.Getter;
 import lombok.Setter;
 
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class SignupRequest {
     private String username;
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 4)
     private String login;
 
     @NotBlank

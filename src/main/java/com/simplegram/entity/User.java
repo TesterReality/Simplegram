@@ -23,11 +23,14 @@ public class User {
     private String id = UUID.randomUUID().toString();
 
     @NotBlank
-    @Size(max = 20)
+    //@Size(max = 20)
+    @Size(min = 1, max = 5)
+
     private String username;
 
     @NotBlank
-    @Size(max = 20)
+   // @Size(max = 5)
+    @Size(min = 1, max = 5)
     private String login;
 
     @NotBlank

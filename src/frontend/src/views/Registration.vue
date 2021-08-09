@@ -231,10 +231,17 @@
                                 this.successful = true;
                             },
                             error => {
+                                console.log(error.response);
+
+                                console.log(error.response.data);
+                                console.log(error.message);
+
                                 this.message =
                                     (error.response && error.response.data && error.response.data.message) ||
                                     error.message ||
                                     error.toString();
+                                console.log(error);
+
                                 this.successful = false;
                                 delete this.formdata;
                             }
