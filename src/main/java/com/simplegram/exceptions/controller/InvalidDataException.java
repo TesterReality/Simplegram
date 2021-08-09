@@ -36,23 +36,27 @@ public class InvalidDataException {
                 details);
 
         JSONObject info = new JSONObject();
-        JSONArray ja = new JSONArray();
-        ja.put("Validation");
+        info.put("status",HttpStatus.BAD_REQUEST.value());
+        info.put("message",messageSource.getMessage("error.validation",
+                null, Locale.ENGLISH));
+
         JSONObject jo = new JSONObject();
 
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
 
-            jo = new JSONObject();
-            info.put(violation.getPropertyPath().toString(), violation.getMessage());
+            //jo = new JSONObject();
+            //info.put(violation.getPropertyPath().toString(), violation.getMessage());
 
-            jo.put(violation.getPropertyPath().toString(), violation.getInvalidValue().toString());
-            jo.put("message", violation.getMessage());
-            ja.put(jo);
+            jo.put(violation.getPropertyPath().toString(), messageSource.getMessage("error.invalid",
+                    null, Locale.ENGLISH)+" "+violation.getPropertyPath().toString());
         }
+        info.put("validation",jo);
+
+        System.out.println(info.toString());
         ResponseEntity test = ResponseEntity
                 .badRequest()//402 нужно?
-                .body(ja.toString());
+                .body(info.toString());
         return test;
     }
 }
