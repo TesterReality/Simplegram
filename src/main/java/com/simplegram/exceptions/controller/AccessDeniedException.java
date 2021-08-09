@@ -1,8 +1,9 @@
 package com.simplegram.exceptions.controller;
 
-import com.simplegram.exceptions.ImageGenerationException;
+import com.simplegram.exceptions.UserUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,16 +12,15 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @ControllerAdvice
-public class RestExceptionHandler {
+public class AccessDeniedException {
 
     private final MessageSource messageSource;
 
-    @ExceptionHandler(value = {ImageGenerationException.class})
-    protected ResponseEntity<Object> imageGenerationException() {
+    @ExceptionHandler(value = {UserUnauthorizedException.class})
+    protected ResponseEntity<Object> userUnauthorizedException() {
 
-        return ResponseEntity
-                .badRequest()
-                .body(messageSource.getMessage("user.answer.errorCreateAccount",
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(messageSource.getMessage("exception.unauthorized",
                         null, Locale.ENGLISH));
     }
 }

@@ -71,7 +71,7 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] удалить Role заменить на Enumeratated
 - [X] application.properties -> yaml
 - [X] @Value заменить на ApplicationConfiguration
-- [ ] кастомные exception + @ExceptionAdvice
+- [X] кастомные exception + @ExceptionAdvice
 - [ ] адвайс для валидации
 - [ ] исправить gradle
 - [ ] убрать webjars
