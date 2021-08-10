@@ -68,7 +68,7 @@ public class AuthController {
     }
 
     @RequestMapping(path = "/signup", method = POST)
-    public ResponseEntity<?> registerUser(@RequestPart(name = "userData") SignupRequest signupRequest,
+    public ResponseEntity<?> registerUser(@Valid @RequestPart(name = "userData") SignupRequest signupRequest,
                                           @RequestPart(name = "file", required = false) MultipartFile file) {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
 

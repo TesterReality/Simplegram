@@ -13,11 +13,11 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotBlank
-    @Size(min = 3, max = 20)
+    @Size(min = 1, max = 3)
     private String username;
 
     @NotBlank
-    @Size(min = 3, max = 4)
+    @Size(min = 1, max = 3)
     private String login;
 
     @NotBlank

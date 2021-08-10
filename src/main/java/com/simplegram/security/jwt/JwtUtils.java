@@ -40,19 +40,19 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(config.getJwtSecret()).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            log.error(messageSource.getMessage("error.JWTsignature",
+            log.error(messageSource.getMessage("error.jwt-signature",
                     null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error(messageSource.getMessage("error.JWTtoken",
+            log.error(messageSource.getMessage("error.jwt-token",
                     null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error(messageSource.getMessage("error.JWTtokenExpired",
+            log.error(messageSource.getMessage("error.jwt-tokenExpired",
                     null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error(messageSource.getMessage("error.JWTtokenUnsupported",
+            log.error(messageSource.getMessage("error.jwt-tokenUnsupported",
                     null, Locale.ENGLISH) + ": {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error(messageSource.getMessage("error.JWTempty",
+            log.error(messageSource.getMessage("error.jwt-empty",
                     null, Locale.ENGLISH) + ": {}", e.getMessage());
         }
         return false;
