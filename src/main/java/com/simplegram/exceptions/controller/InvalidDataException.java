@@ -21,7 +21,7 @@ public class InvalidDataException {
     private final MessageSource messageSource;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> test(MethodArgumentNotValidException e) {
+    protected ResponseEntity<Object> invalidDataAnswer(MethodArgumentNotValidException e) {
         HashMap<String, String> validation = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         JsonAnswerInvalidData jsonAnswer = new JsonAnswerInvalidData();
@@ -29,11 +29,11 @@ public class InvalidDataException {
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             validation.put(fieldError.getField(), messageSource.getMessage("error.invalid-" + fieldError.getField(),
-                    null, Locale.ENGLISH));
+                    null, Locale.getDefault()));
         }
         jsonAnswer.setStatus(HttpStatus.BAD_REQUEST.value());
         jsonAnswer.setMessage(messageSource.getMessage("error.validation",
-                null, Locale.ENGLISH));
+                null, Locale.getDefault()));
         jsonAnswer.setValidation(validation);
         try {
             result = mapper.writeValueAsString(jsonAnswer);

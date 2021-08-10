@@ -72,10 +72,10 @@ Java, Spring, Hibernate, JWT, Vue.js, VueRouter, Vuetify, Vuex, SockJs, Axios.
 - [X] application.properties -> yaml
 - [X] @Value заменить на ApplicationConfiguration
 - [X] кастомные exception + @ExceptionAdvice
-- [ ] адвайс для валидации
-- [ ] исправить gradle
-- [ ] убрать webjars
-- [ ] загрузка языка при помощи Spring
+- [X] адвайс для валидации
+- [X] исправить gradle
+- [X] убрать webjars
+- [X] загрузка языка при помощи Spring
 
 Сейчас соединение по SockJs устанавливается в тестовом режиме (просто, что оно есть):
 [![Simplegram](https://thumb.cloud.mail.ru/weblink/thumb/xw1/aray/6orn3HUDy/Screenshot_5.jpg)]()

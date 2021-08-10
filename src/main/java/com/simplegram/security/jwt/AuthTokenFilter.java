@@ -43,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             log.error(messageSource.getMessage("error.authenticate",
-                    null, Locale.ENGLISH), e);
+                    null, Locale.getDefault()), e);
         }
         filterChain.doFilter(request, response);
     }

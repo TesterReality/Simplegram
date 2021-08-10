@@ -41,19 +41,19 @@ public class JwtUtils {
             return true;
         } catch (SignatureException e) {
             log.error(messageSource.getMessage("error.jwt-signature",
-                    null, Locale.ENGLISH) + ": {}", e.getMessage());
+                    null, Locale.getDefault()) + ": {}", e.getMessage());
         } catch (MalformedJwtException e) {
             log.error(messageSource.getMessage("error.jwt-token",
-                    null, Locale.ENGLISH) + ": {}", e.getMessage());
+                    null, Locale.getDefault()) + ": {}", e.getMessage());
         } catch (ExpiredJwtException e) {
             log.error(messageSource.getMessage("error.jwt-tokenExpired",
-                    null, Locale.ENGLISH) + ": {}", e.getMessage());
+                    null, Locale.getDefault()) + ": {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
             log.error(messageSource.getMessage("error.jwt-tokenUnsupported",
-                    null, Locale.ENGLISH) + ": {}", e.getMessage());
+                    null, Locale.getDefault()) + ": {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error(messageSource.getMessage("error.jwt-empty",
-                    null, Locale.ENGLISH) + ": {}", e.getMessage());
+                    null, Locale.getDefault()) + ": {}", e.getMessage());
         }
         return false;
     }

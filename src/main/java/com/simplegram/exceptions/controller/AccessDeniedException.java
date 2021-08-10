@@ -21,6 +21,6 @@ public class AccessDeniedException {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(messageSource.getMessage("exception.unauthorized",
-                        null, Locale.ENGLISH));
+                        null, Locale.getDefault()));
     }
 }

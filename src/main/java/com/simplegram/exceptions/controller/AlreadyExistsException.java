@@ -21,6 +21,6 @@ public class AlreadyExistsException {
         return ResponseEntity
                 .badRequest()//402 нужно?
                 .body(messageSource.getMessage("exception.loginAlreadyTaken",
-                        null, Locale.ENGLISH));
+                        null, Locale.getDefault()));
     }
 }

@@ -20,6 +20,6 @@ public class ServiceException {
         return ResponseEntity
                 .badRequest()
                 .body(messageSource.getMessage("user.answer.errorCreateAccount",
-                        null, Locale.ENGLISH));
+                        null, Locale.getDefault()));
     }
 }

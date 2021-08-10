@@ -49,9 +49,9 @@ public class ImageGenerationService {
             log.error(e, e);
         } catch (IOException e) {
             log.error(messageSource.getMessage("error.loadAvatars",
-                    null, Locale.ENGLISH));
+                    null, Locale.getDefault()));
         }
         throw new ImageGenerationException(messageSource.getMessage("exception.imageGeneratedException",
-                null, Locale.ENGLISH));
+                null, Locale.getDefault()));
     }
 }

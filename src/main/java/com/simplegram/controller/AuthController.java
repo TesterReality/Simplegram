@@ -73,7 +73,7 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
 
             throw new LoginAlreadyTakenException(messageSource.getMessage("exception.loginAlreadyTaken",
-                    null, Locale.ENGLISH));
+                    null, Locale.getDefault()));
         }
 
         User user = new User();
@@ -103,6 +103,6 @@ public class AuthController {
 
         userRepository.save(user);
         return ResponseEntity.ok(messageSource.getMessage("success.registration",
-                null, Locale.ENGLISH));
+                null, Locale.getDefault()));
     }
 }
