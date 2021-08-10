@@ -16,7 +16,6 @@ import java.util.Locale;
 @Log4j2
 @Component
 public class JwtUtils {
-
     private final ConfigProperties config;
     private final MessageSource messageSource;
 

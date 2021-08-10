@@ -13,18 +13,12 @@ import java.util.Objects;
 @Getter
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
-
     private final String id;
-
     private final String username;
-
     private final String login;
-
     @JsonIgnore
     private final String password;
-
     private final String avatar;
-
     private final String role;
 
     public UserDetailsImpl(String id, String username, String login, String password, String avatar,
@@ -46,7 +40,6 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 user.getAvatar(), ERole.ROLE_USER.toString());
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

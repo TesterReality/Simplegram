@@ -23,7 +23,6 @@ import java.util.Locale;
 @Component
 @Log4j2
 public class AuthTokenFilter extends OncePerRequestFilter {
-
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
     private final MessageSource messageSource;

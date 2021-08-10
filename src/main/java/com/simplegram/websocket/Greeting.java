@@ -1,7 +1,6 @@
 package com.simplegram.websocket;
 
 public class Greeting {
-
     private String content;
 
     public Greeting() {

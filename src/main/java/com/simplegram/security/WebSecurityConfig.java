@@ -35,7 +35,6 @@ import java.io.File;
         // jsr250Enabled = true,
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final AuthTokenFilter authTokenFilter;

@@ -1,7 +1,7 @@
 package com.simplegram.services;
 
 import com.simplegram.config.ConfigProperties;
-import com.simplegram.exceptions.ImageGenerationException;
+import com.simplegram.exceptions.ServiceException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -27,7 +27,6 @@ import java.util.UUID;
 @Log4j2
 @Component
 public class ImageGenerationService {
-
     private final MessageSource messageSource;
     private final ConfigProperties config;
 
@@ -51,7 +50,9 @@ public class ImageGenerationService {
             log.error(messageSource.getMessage("error.loadAvatars",
                     null, Locale.getDefault()));
         }
-        throw new ImageGenerationException(messageSource.getMessage("exception.imageGeneratedException",
+        log.error(messageSource.getMessage("exception.imageGeneratedException",
                 null, Locale.getDefault()));
+        throw new ServiceException("user.answer.errorCreateAccount");
+
     }
 }

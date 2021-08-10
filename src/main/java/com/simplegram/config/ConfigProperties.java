@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "application")
 public class ConfigProperties {
-
     private String uploadPath;
     private int jwtExpirationMs;
     private String jwtSecret;

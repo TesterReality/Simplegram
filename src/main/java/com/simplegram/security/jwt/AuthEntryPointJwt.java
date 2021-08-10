@@ -17,7 +17,6 @@ import java.util.Locale;
 @Log4j2
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-
     private final MessageSource messageSource;
 
     @Override

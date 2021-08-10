@@ -1,4 +1,4 @@
-package com.simplegram.exceptions.jsonAnswer;
+package com.simplegram.dto;
 
 import lombok.Getter;
 import lombok.Setter;

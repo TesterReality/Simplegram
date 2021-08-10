@@ -16,7 +16,6 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     private final UserRepository userRepository;
     private final MessageSource messageSource;
 

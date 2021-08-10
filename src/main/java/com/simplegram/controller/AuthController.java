@@ -2,7 +2,7 @@ package com.simplegram.controller;
 
 import com.simplegram.config.ConfigProperties;
 import com.simplegram.entity.User;
-import com.simplegram.exceptions.LoginAlreadyTakenException;
+import com.simplegram.exceptions.AlreadyExistsException;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import com.simplegram.payload.response.JwtResponse;
@@ -71,9 +71,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestPart(name = "userData") SignupRequest signupRequest,
                                           @RequestPart(name = "file", required = false) MultipartFile file) {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
-
-            throw new LoginAlreadyTakenException(messageSource.getMessage("exception.loginAlreadyTaken",
-                    null, Locale.getDefault()));
+            throw new AlreadyExistsException("exception.loginAlreadyTaken");
         }
 
         User user = new User();
