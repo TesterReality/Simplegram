@@ -21,20 +21,19 @@ public class User {
 
     @NotBlank
     //@Size(max = 20)
-    @Size(min = 1, max = 5)
-
+    @Size(min = 3, max = 20)
     private String username;
 
     @NotBlank
    // @Size(max = 5)
-    @Size(min = 1, max = 5)
+    @Size(min = 3, max = 20)
     private String login;
 
     @NotBlank
     @Size(max = 120)
     private String password;
 
-    @NotBlank
+    //@NotBlank
     @Size(max = 140)
     private String avatar;
 

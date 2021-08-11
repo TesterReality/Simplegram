@@ -9,7 +9,6 @@ public class AppConfig {
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
-
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setBasenames("messages/messages");
         source.setUseCodeAsDefaultMessage(true);

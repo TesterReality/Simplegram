@@ -2,7 +2,7 @@ package com.simplegram.controller;
 
 import com.simplegram.config.ConfigProperties;
 import com.simplegram.entity.User;
-import com.simplegram.exceptions.AlreadyExistsException;
+import com.simplegram.exceptions.BadRequestException;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import com.simplegram.payload.response.JwtResponse;
@@ -51,7 +51,6 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
 
@@ -71,7 +70,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestPart(name = "userData") SignupRequest signupRequest,
                                           @RequestPart(name = "file", required = false) MultipartFile file) {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
-            throw new AlreadyExistsException("exception.loginAlreadyTaken");
+            throw new BadRequestException("exception.loginAlreadyTaken");
         }
 
         User user = new User();
@@ -94,12 +93,13 @@ public class AuthController {
                 log.error(e, e);
             }
         }
-        if (user.getAvatar() == null) {
-            String userAvatarName = imageGenerationService.loadAvatarFromUrl(user.getLogin(), userAvatarsDir);
-            user.setAvatar(userAvatarName);
-        }
 
         userRepository.save(user);
+
+        if (user.getAvatar() == null) {
+            imageGenerationService.loadAvatarFromUrl(user);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,8 +1,8 @@
-package com.simplegram.exceptions.controller;
+package com.simplegram.advice;
 
-import com.simplegram.dto.JsonAnswer;
-import com.simplegram.exceptions.AccessDeniedException;
-import com.simplegram.exceptions.AlreadyExistsException;
+import com.simplegram.payload.response.ExceptionResponse;
+import com.simplegram.exceptions.UnauthorizedException;
+import com.simplegram.exceptions.BadRequestException;
 import com.simplegram.exceptions.ServiceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -18,40 +18,36 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 @ControllerAdvice
-public class ExceptionResponse {
+public class ExceptionAdvice {
     private final MessageSource messageSource;
 
-    @ExceptionHandler(value = {AlreadyExistsException.class})
-    protected ResponseEntity<String> loginAlreadyTakenException(AlreadyExistsException e) {
-
+    @ExceptionHandler(BadRequestException.class)
+    protected ResponseEntity<String> loginAlreadyTakenException(BadRequestException e) {
         return ResponseEntity
-                .badRequest()
+                .status(e.getStatus())
                 .body(messageSource.getMessage(e.getMessage(),
                         null, Locale.getDefault()));
     }
 
-    @ExceptionHandler(value = {AccessDeniedException.class})
-    protected ResponseEntity<String> userUnauthorizedException(AccessDeniedException e) {
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthorizedException.class)
+    protected ResponseEntity<String> userUnauthorizedException(UnauthorizedException e) {
+        return ResponseEntity.status(e.getStatus())
                 .body(messageSource.getMessage(e.getMessage(),
                         null, Locale.getDefault()));
     }
 
-    @ExceptionHandler(value = {ServiceException.class})
+    @ExceptionHandler(ServiceException.class)
     protected ResponseEntity<String> imageGenerationException(ServiceException e) {
-
         return ResponseEntity
-                .badRequest()
+                .status(e.getStatus())
                 .body(messageSource.getMessage(e.getMessage(),
                         null, Locale.getDefault()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<JsonAnswer> invalidDataAnswer(MethodArgumentNotValidException e) {
+    protected ResponseEntity<ExceptionResponse> invalidDataAnswer(MethodArgumentNotValidException e) {
         HashMap<String, String> validation = new HashMap<>();
-        JsonAnswer jsonAnswer = new JsonAnswer();
-
+        ExceptionResponse jsonAnswer = new ExceptionResponse();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             String code = "error.invalid-" + fieldError.getField();
             String message = messageSource.getMessage(code, null, Locale.getDefault());
