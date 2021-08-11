@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class JsonAnswerInvalidData {
+public class JsonAnswer {
     private int status;
     private String message;
     private Map<String, String> validation;

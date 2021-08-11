@@ -1,7 +1,7 @@
 package com.simplegram.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.simplegram.entity.ERole;
+import com.simplegram.entity.Role;
 import com.simplegram.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +38,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getLogin(),
                 user.getPassword(),
-                user.getAvatar(), ERole.ROLE_USER.toString());
+                user.getAvatar(), Role.ROLE_USER.toString());
     }
 
     @Override

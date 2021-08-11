@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -100,7 +100,6 @@ public class AuthController {
         }
 
         userRepository.save(user);
-        return ResponseEntity.ok(messageSource.getMessage("success.registration",
-                null, Locale.getDefault()));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

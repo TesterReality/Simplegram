@@ -1,6 +1,6 @@
 package com.simplegram.exceptions.controller;
 
-import com.simplegram.dto.JsonAnswerInvalidData;
+import com.simplegram.dto.JsonAnswer;
 import com.simplegram.exceptions.AccessDeniedException;
 import com.simplegram.exceptions.AlreadyExistsException;
 import com.simplegram.exceptions.ServiceException;
@@ -22,7 +22,7 @@ public class ExceptionResponse {
     private final MessageSource messageSource;
 
     @ExceptionHandler(value = {AlreadyExistsException.class})
-    protected ResponseEntity loginAlreadyTakenException(AlreadyExistsException e) {
+    protected ResponseEntity<String> loginAlreadyTakenException(AlreadyExistsException e) {
 
         return ResponseEntity
                 .badRequest()
@@ -31,15 +31,15 @@ public class ExceptionResponse {
     }
 
     @ExceptionHandler(value = {AccessDeniedException.class})
-    protected ResponseEntity<Object> userUnauthorizedException() {
+    protected ResponseEntity<String> userUnauthorizedException(AccessDeniedException e) {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(messageSource.getMessage("exception.unauthorized",
+                .body(messageSource.getMessage(e.getMessage(),
                         null, Locale.getDefault()));
     }
 
     @ExceptionHandler(value = {ServiceException.class})
-    protected ResponseEntity<Object> imageGenerationException(ServiceException e) {
+    protected ResponseEntity<String> imageGenerationException(ServiceException e) {
 
         return ResponseEntity
                 .badRequest()
@@ -48,9 +48,9 @@ public class ExceptionResponse {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> invalidDataAnswer(MethodArgumentNotValidException e) {
+    protected ResponseEntity<JsonAnswer> invalidDataAnswer(MethodArgumentNotValidException e) {
         HashMap<String, String> validation = new HashMap<>();
-        JsonAnswerInvalidData jsonAnswer = new JsonAnswerInvalidData();
+        JsonAnswer jsonAnswer = new JsonAnswer();
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             String code = "error.invalid-" + fieldError.getField();
