@@ -1,7 +1,6 @@
 package com.simplegram.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.simplegram.entity.Role;
 import com.simplegram.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,17 +18,15 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private final String password;
     private final String avatar;
-    private final String role;
 
     public UserDetailsImpl(String id, String username,
                            String login, String password,
-                           String avatar, String role) {
+                           String avatar) {
         this.id = id;
         this.username = username;
         this.login = login;
         this.password = password;
         this.avatar = avatar;
-        this.role = role;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -38,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getLogin(),
                 user.getPassword(),
-                user.getAvatar(), Role.ROLE_USER.toString());
+                user.getAvatar());
     }
 
     @Override

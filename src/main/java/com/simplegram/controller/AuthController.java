@@ -37,8 +37,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Log4j2
 @RequiredArgsConstructor
-@ComponentScan(basePackages = "com.simplegram")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 @EnableAsync
@@ -48,7 +46,6 @@ public class AuthController {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final ImageGenerationService imageGenerationService;
-    private final MessageSource messageSource;
     private final ConfigProperties config;
 
     @PostMapping("/signin")
