@@ -21,13 +21,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    //ищем не по username а по login
+    //using login
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException(messageSource.getMessage("error.UserLoginNotFound",
-                        null, Locale.getDefault()) + ": " + login));
+                .orElseThrow(() -> new UsernameNotFoundException
+                (messageSource.getMessage("error.UserLoginNotFound", null, Locale.getDefault()) + ": " + login));
 
         return UserDetailsImpl.build(user);
     }
-
 }

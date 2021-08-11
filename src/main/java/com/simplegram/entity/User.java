@@ -23,12 +23,10 @@ public class User {
     private String id = UUID.randomUUID().toString();
 
     @NotBlank
-    //@Size(max = 20)
     @Size(min = 3, max = 20)
     private String username;
 
     @NotBlank
-    // @Size(max = 5)
     @Size(min = 3, max = 20)
     private String login;
 
@@ -36,7 +34,6 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    //@NotBlank
     @Size(max = 140)
     private String avatar;
 
@@ -46,5 +43,4 @@ public class User {
 
     public User() {
     }
-
 }

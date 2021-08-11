@@ -30,10 +30,7 @@ import java.io.File;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
-        prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
@@ -48,8 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                // .allowedOrigins("http://localhost:3000")
-
                 .allowedOrigins("*")
                 .allowedMethods("*");
     }
@@ -77,10 +72,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     }
 
     @Override
-    //Раздаем ресурсы по ссылке
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String pathToUserAvatrs = config.getUploadPath() + "avatars/";
-        File dirUpload = new File(pathToUserAvatrs);
+        String pathToUserAvatars = config.getUploadPath() + "avatars/";
+        File dirUpload = new File(pathToUserAvatars);
         String path = dirUpload.getAbsolutePath();
         registry.addResourceHandler("/avatars/**")
                 .addResourceLocations("file:" + path + "/")

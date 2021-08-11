@@ -36,5 +36,4 @@ public class JwtResponse {
     public void setTokenType(String tokenType) {
         this.type = tokenType;
     }
-
 }

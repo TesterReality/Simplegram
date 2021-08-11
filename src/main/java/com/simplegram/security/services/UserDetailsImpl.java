@@ -21,8 +21,9 @@ public class UserDetailsImpl implements UserDetails {
     private final String avatar;
     private final String role;
 
-    public UserDetailsImpl(String id, String username, String login, String password, String avatar,
-                           String role) {
+    public UserDetailsImpl(String id, String username,
+                           String login, String password,
+                           String avatar, String role) {
         this.id = id;
         this.username = username;
         this.login = login;

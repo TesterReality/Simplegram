@@ -35,11 +35,9 @@ public class ImageGenerationService {
     @Async
     @SneakyThrows(IOException.class)
     public void loadAvatarFromUrl(String userLogin, String userId) {
-
         URL url = new URL(config.getImageGenerator() + "/" + userLogin + ".png");
         URLConnection uc = url.openConnection();
-        uc.setRequestProperty("User-Agent",
-                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+        uc.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
         uc.connect();
 
         String userAvatarName = UUID.randomUUID().toString().concat(".png");
@@ -51,7 +49,6 @@ public class ImageGenerationService {
                 IOUtils.copy(is, out);
             }
         }
-
         userRepository.updateAvatarByUUID(userId, userAvatarName);
     }
 }

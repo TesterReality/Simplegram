@@ -25,14 +25,14 @@ public class ExceptionAdvice {
     protected ResponseEntity<String> errorAnswer(ServiceException e) {
         return ResponseEntity
                 .status(e.getStatus())
-                .body(messageSource.getMessage(e.getMessage(),
-                        null, Locale.getDefault()));
+                .body(messageSource.getMessage(e.getMessage(), null, Locale.getDefault()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ExceptionResponse> invalidDataAnswer(MethodArgumentNotValidException e) {
         HashMap<String, String> validation = new HashMap<>();
         ExceptionResponse jsonAnswer = new ExceptionResponse();
+
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
             String code = "error.invalid-" + fieldError.getField();
             String message = messageSource.getMessage(code, null, Locale.getDefault());
@@ -49,6 +49,4 @@ public class ExceptionAdvice {
                 .badRequest()
                 .body(jsonAnswer);
     }
-
-
 }
