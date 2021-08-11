@@ -34,9 +34,7 @@ public class ExceptionAdvice {
         ExceptionResponse jsonAnswer = new ExceptionResponse();
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            String code = "error.invalid-" + fieldError.getField();
-            String message = messageSource.getMessage(code, null, Locale.getDefault());
-            validation.put(fieldError.getField(), message);
+            validation.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
         String message = messageSource.getMessage("error.validation", null, Locale.getDefault());
