@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Locale;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -38,21 +37,12 @@ public class JwtUtils {
         try {
             Jwts.parser().setSigningKey(config.getJwtSecret()).parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
-            log.error(messageSource.getMessage("error.jwt-signature",
-                    null, Locale.getDefault()) + ": {}", e.getMessage());
-        } catch (MalformedJwtException e) {
-            log.error(messageSource.getMessage("error.jwt-token",
-                    null, Locale.getDefault()) + ": {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error(messageSource.getMessage("error.jwt-tokenExpired",
-                    null, Locale.getDefault()) + ": {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error(messageSource.getMessage("error.jwt-tokenUnsupported",
-                    null, Locale.getDefault()) + ": {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error(messageSource.getMessage("error.jwt-empty",
-                    null, Locale.getDefault()) + ": {}", e.getMessage());
+        } catch (SignatureException |
+                MalformedJwtException |
+                ExpiredJwtException |
+                UnsupportedJwtException |
+                IllegalArgumentException e) {
+            log.error(e, e);
         }
         return false;
     }

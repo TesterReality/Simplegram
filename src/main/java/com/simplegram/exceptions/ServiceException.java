@@ -9,7 +9,7 @@ public class ServiceException extends RuntimeException {
     private final HttpStatus status;
 
     public ServiceException(String message, HttpStatus status) {
-        this.message=message;
-        this.status=status;
+        this.message = message;
+        this.status = status;
     }
 }

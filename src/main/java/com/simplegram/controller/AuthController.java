@@ -17,6 +17,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,6 +41,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@EnableAsync
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
@@ -97,7 +99,7 @@ public class AuthController {
         userRepository.save(user);
 
         if (user.getAvatar() == null) {
-            imageGenerationService.loadAvatarFromUrl(user);
+            imageGenerationService.loadAvatarFromUrl(user.getLogin(), user.getId());
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

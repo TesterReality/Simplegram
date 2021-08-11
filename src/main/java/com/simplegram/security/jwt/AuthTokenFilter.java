@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Locale;
 
 @RequiredArgsConstructor
 @Component
@@ -41,8 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            log.error(messageSource.getMessage("error.authenticate",
-                    null, Locale.getDefault()), e);
+            log.error(e, e);
         }
         filterChain.doFilter(request, response);
     }

@@ -1,9 +1,9 @@
 package com.simplegram.advice;
 
-import com.simplegram.payload.response.ExceptionResponse;
-import com.simplegram.exceptions.UnauthorizedException;
 import com.simplegram.exceptions.BadRequestException;
 import com.simplegram.exceptions.ServiceException;
+import com.simplegram.exceptions.UnauthorizedException;
+import com.simplegram.payload.response.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -21,23 +21,8 @@ import java.util.Locale;
 public class ExceptionAdvice {
     private final MessageSource messageSource;
 
-    @ExceptionHandler(BadRequestException.class)
-    protected ResponseEntity<String> loginAlreadyTakenException(BadRequestException e) {
-        return ResponseEntity
-                .status(e.getStatus())
-                .body(messageSource.getMessage(e.getMessage(),
-                        null, Locale.getDefault()));
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    protected ResponseEntity<String> userUnauthorizedException(UnauthorizedException e) {
-        return ResponseEntity.status(e.getStatus())
-                .body(messageSource.getMessage(e.getMessage(),
-                        null, Locale.getDefault()));
-    }
-
-    @ExceptionHandler(ServiceException.class)
-    protected ResponseEntity<String> imageGenerationException(ServiceException e) {
+    @ExceptionHandler({BadRequestException.class, UnauthorizedException.class})
+    protected ResponseEntity<String> errorAnswer(ServiceException e) {
         return ResponseEntity
                 .status(e.getStatus())
                 .body(messageSource.getMessage(e.getMessage(),
