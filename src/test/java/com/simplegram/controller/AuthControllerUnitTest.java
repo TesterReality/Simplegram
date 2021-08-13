@@ -16,17 +16,17 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
 public class AuthControllerUnitTest {
@@ -81,18 +81,18 @@ public class AuthControllerUnitTest {
         UserRepository repository = mock(UserRepository.class);
         ConfigProperties config = mock(ConfigProperties.class);
         PasswordEncoder encoder = mock(PasswordEncoder.class);
-        MockMultipartFile firstFile = new MockMultipartFile("data", "filename.png", "application/json", "hackerString".getBytes());
+        MultipartFile multipartFile = mock(MultipartFile.class);
 
         when(repository.existsByLogin(any())).thenReturn(false);
         when(repository.existsByLogin(Mockito.eq("test"))).thenReturn(true);
         when(config.getUploadPath()).thenReturn("uploads");
         when(repository.save(captor.capture())).thenAnswer(e -> e.getArguments()[0]);
-        //when(firstFile.transferTo(any())).thenAnswer();
+        doNothing().when(multipartFile).transferTo(any(File.class));
 
         AuthController controller = new AuthController(null, repository, encoder, null, null, config);
 
         request.setLogin("test1");
-        controller.registerUser(request, firstFile);
+        controller.registerUser(request, multipartFile);
 
         User userWithAvatar = captor.getValue();
         Assert.assertNotNull(userWithAvatar.getAvatar());
