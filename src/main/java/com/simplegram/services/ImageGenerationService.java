@@ -53,7 +53,7 @@ public class ImageGenerationService {
         HttpEntity entity = new HttpEntity(headers);
         ResponseEntity<Resource> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, Resource.class);
 
-        try(InputStream in = responseEntity.getBody().getInputStream();) {
+        try(InputStream in = responseEntity.getBody().getInputStream()) {
             try (FileOutputStream out = new FileOutputStream(userAvatarsDir)) {
                 IOUtils.copy(in, out);
             }
