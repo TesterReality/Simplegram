@@ -71,7 +71,6 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
             throw new BadRequestException("exception.loginAlreadyTaken");
         }
-
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setLogin(signupRequest.getLogin());

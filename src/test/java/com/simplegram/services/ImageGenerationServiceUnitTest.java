@@ -1,8 +1,7 @@
-package com.simplegram.controller;
+package com.simplegram.services;
 
 import com.simplegram.config.ConfigProperties;
 import com.simplegram.repository.UserRepository;
-import com.simplegram.services.ImageGenerationService;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -78,6 +77,6 @@ public class ImageGenerationServiceUnitTest {
         Assert.assertFalse(nameTempAvatar.isEmpty());
 
         File newFiles = Paths.get(testDirectoryPath, "avatars", nameTempAvatar).toFile();
-        Assert.assertTrue(FileUtils.contentEquals(fileSystemResource.getFile(),newFiles));
+        Assert.assertTrue(FileUtils.contentEquals(fileSystemResource.getFile(), newFiles));
     }
 }
