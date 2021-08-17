@@ -3,6 +3,7 @@ package com.simplegram.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
+import org.apache.commons.codec.CharEncoding;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,9 +39,6 @@ public class AuthControllerApiTest {
     @Test
     public void invoke_authenticateUser_success1() throws Exception {
 
-        //MockMultipartFile firstFile = new MockMultipartFile("data", "filename.png", "text/plain", "some xml".getBytes());
-
-
         ObjectMapper mapper = new ObjectMapper();
 
         SignupRequest signupRequest = new SignupRequest();
@@ -48,28 +47,15 @@ public class AuthControllerApiTest {
         signupRequest.setPassword("qwertyuiop");
         String json = mapper.writeValueAsString(signupRequest);
 
+        MockMultipartFile file = new MockMultipartFile("userData", "url", MediaType.APPLICATION_JSON_VALUE, json.getBytes());
 
-        //MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/auth/signup")
-                // .file(firstFile)
-                // .file(secondFile)
-                // .file(jsonFile)
-               // .headers(MediaType.MULTIPART_FORM_DATA)
-                //.contentType(MediaType.MULTIPART_FORM_DATA)
-                .param("userData", json))
-                .andExpect(status().is2xxSuccessful())
-                .andDo(print());
-
-
-
-
-/*
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/signup")
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andDo(print());*/
+                .file(file)
+                .content(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding(CharEncoding.UTF_8))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -77,7 +63,7 @@ public class AuthControllerApiTest {
         ObjectMapper mapper = new ObjectMapper();
 
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setLogin("dudos");
+        loginRequest.setLogin("dudosik");
         loginRequest.setPassword("qwertyuiop");
         String json = mapper.writeValueAsString(loginRequest);
 

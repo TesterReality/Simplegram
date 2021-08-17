@@ -10,11 +10,13 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.BufferedImageHttpMessageConverter;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +26,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -50,9 +52,17 @@ public class ImageGenerationService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", headerValue);
         HttpEntity entity = new HttpEntity(headers);
-        ResponseEntity<Resource> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, Resource.class);
 
-        try(InputStream in = responseEntity.getBody().getInputStream()) {
+        restTemplate.setMessageConverters(
+                Arrays.asList(new BufferedImageHttpMessageConverter()));
+        restTemplate.getMessageConverters().add(
+                new ByteArrayHttpMessageConverter());
+        //Object gg = restTemplate.exchange(url, HttpMethod.GET, entity, Resource.class);
+        ResponseEntity<byte[]> responseEntity1= restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+
+       // ResponseEntity<ByteArrayResource> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, ByteArrayResource.class);
+
+        try(InputStream in = new ByteArrayResource(responseEntity1.getBody()).getInputStream()) {
             try (FileOutputStream out = new FileOutputStream(userAvatarsDir)) {
                 IOUtils.copy(in, out);
             }
