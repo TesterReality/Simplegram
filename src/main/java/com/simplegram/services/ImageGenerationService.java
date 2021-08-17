@@ -36,12 +36,11 @@ public class ImageGenerationService {
     private final ConfigProperties config;
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
-    private String userAvatarName;
 
     @Async
     @SneakyThrows({IOException.class})
     public void loadAvatarFromUrl(String userLogin, String userId) {
-        userAvatarName = UUID.randomUUID().toString().concat(".png");
+        String userAvatarName = UUID.randomUUID().toString().concat(".png");
         String url = config.getImageGenerator() + "/" + userLogin + ".png";
         String headerValue = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)";
 
