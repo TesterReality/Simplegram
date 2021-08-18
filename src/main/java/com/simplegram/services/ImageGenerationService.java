@@ -53,16 +53,12 @@ public class ImageGenerationService {
         headers.set("User-Agent", headerValue);
         HttpEntity entity = new HttpEntity(headers);
 
-        restTemplate.setMessageConverters(
-                Arrays.asList(new BufferedImageHttpMessageConverter()));
         restTemplate.getMessageConverters().add(
                 new ByteArrayHttpMessageConverter());
-        //Object gg = restTemplate.exchange(url, HttpMethod.GET, entity, Resource.class);
-        ResponseEntity<byte[]> responseEntity1= restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 
-       // ResponseEntity<ByteArrayResource> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, ByteArrayResource.class);
+        ResponseEntity<byte[]> responseEntity= restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 
-        try(InputStream in = new ByteArrayResource(responseEntity1.getBody()).getInputStream()) {
+        try(InputStream in = new ByteArrayResource(responseEntity.getBody()).getInputStream()) {
             try (FileOutputStream out = new FileOutputStream(userAvatarsDir)) {
                 IOUtils.copy(in, out);
             }

@@ -15,11 +15,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -51,18 +56,21 @@ public class ImageGenerationServiceUnitTest {
         ConfigProperties config = mock(ConfigProperties.class);
         UserRepository userRepository = mock(UserRepository.class);
         RestTemplate restTemplate = mock(RestTemplate.class);
-        ResponseEntity<Resource> responseEntity = mock(ResponseEntity.class);
+        ResponseEntity<byte[]> responseEntity = mock(ResponseEntity.class);
 
-        FileSystemResource fileSystemResource = new FileSystemResource(Paths.get("uploads",
-                "avatars", "0d8d049e-adbc-449c-82f4-3acf928033e6.png"));
+        File testImage = Paths.get("uploads",
+                "avatars", "0d8d049e-adbc-449c-82f4-3acf928033e6.png").toFile();
 
         ArgumentCaptor<String> captorUserAvatarName = ArgumentCaptor.forClass(String.class);
 
-        when(responseEntity.getBody()).thenReturn(fileSystemResource);
+        when(responseEntity.getBody()).thenReturn(Files.readAllBytes(testImage.toPath()));
+
         when(config.getImageGenerator()).thenReturn("https://api.multiavatar.com");
         when(config.getUploadPath()).thenReturn(testDirectoryPath);
-        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Resource.class)))
+        when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(byte[].class)))
                 .thenReturn(responseEntity);
+        when(restTemplate.getMessageConverters()).thenReturn(new ArrayList<>());
+
         doNothing().when(userRepository).updateAvatarByUUID(anyString(), captorUserAvatarName.capture());
 
         ImageGenerationService imgService = new ImageGenerationService(null, config, userRepository, restTemplate);
@@ -72,11 +80,12 @@ public class ImageGenerationServiceUnitTest {
 
         correctURL = config.getImageGenerator() + "/" + userLogin + ".png";
 
-        verify(restTemplate).exchange(eq(correctURL), any(HttpMethod.class), any(HttpEntity.class), eq(Resource.class));
+        verify(restTemplate).exchange(eq(correctURL), any(HttpMethod.class), any(HttpEntity.class), eq(byte[].class));
         verify(userRepository).updateAvatarByUUID(eq(userId), eq(nameTempAvatar));
         Assert.assertFalse(nameTempAvatar.isEmpty());
 
-        File newFiles = Paths.get(testDirectoryPath, "avatars", nameTempAvatar).toFile();
-        Assert.assertTrue(FileUtils.contentEquals(fileSystemResource.getFile(), newFiles));
+        File userImage = Paths.get(testDirectoryPath, "avatars", nameTempAvatar).toFile();
+
+        Assert.assertTrue(FileUtils.contentEquals(testImage, userImage));
     }
 }
