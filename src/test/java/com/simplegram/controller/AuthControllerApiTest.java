@@ -1,6 +1,7 @@
 package com.simplegram.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import org.apache.commons.codec.CharEncoding;
@@ -16,8 +17,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,11 +37,8 @@ public class AuthControllerApiTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
     @Test
-    public void invoke_authenticateUser_success1() throws Exception {
+    public void invoke_registerUser_success() throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -51,11 +52,11 @@ public class AuthControllerApiTest {
 
         mockMvc.perform(MockMvcRequestBuilders.multipart("/api/auth/signup")
                 .file(file)
-                .content(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                //.content(json)
                 .characterEncoding(CharEncoding.UTF_8))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
