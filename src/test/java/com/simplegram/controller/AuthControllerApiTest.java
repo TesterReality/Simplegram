@@ -56,7 +56,7 @@ public class AuthControllerApiTest {
     }
 
     @Test
-    public void invoke_registerUser_success() throws Exception {
+    public void registerUser_success() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         SignupRequest signupRequest = new SignupRequest();
@@ -76,7 +76,7 @@ public class AuthControllerApiTest {
     }
 
     @Test
-    public void invoke_registerUser_badRequestException() throws Exception {
+    public void registerUser_loginAlreadyTaken_expectBadRequestException() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         SignupRequest signupRequest = new SignupRequest();
@@ -96,7 +96,7 @@ public class AuthControllerApiTest {
     }
 
     @Test
-    public void invoke_authenticateUser_success() throws Exception {
+    public void authenticateUser_success() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         LoginRequest loginRequest = new LoginRequest();
@@ -113,7 +113,7 @@ public class AuthControllerApiTest {
     }
 
     @Test
-    public void invoke_authenticateUser_badRequestException() throws Exception {
+    public void authenticateUser_userUnregistered_expectBadRequestException() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         LoginRequest loginRequest = new LoginRequest();
