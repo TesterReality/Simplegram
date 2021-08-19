@@ -1,7 +1,7 @@
 databaseChangeLog:
 
   - changeSet:
-      id: DEV-6
+      id: DEV-2
       author: vlad
       changes:
         - addColumn:

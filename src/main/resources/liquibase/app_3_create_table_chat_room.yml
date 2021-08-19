@@ -1,0 +1,30 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-3
+      author: vlad
+      changes:
+        - createTable:
+            tableName: chat_room
+            remarks: Чат-комнаты
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: chat_room_pkey
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: Название команты
+                  constraints:
+                    unique: false
+                    nullable: true
+              - column:
+                  name: creator
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false

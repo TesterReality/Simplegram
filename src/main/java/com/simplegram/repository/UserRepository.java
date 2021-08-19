@@ -15,6 +15,8 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
     Optional<User> findByLogin(String login);
+    User findById(String UUID);
+
     Boolean existsByUsername(String username);
     Boolean existsByLogin(String login);
 
@@ -22,4 +24,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Transactional
     @Query("update User user set user.avatar =:avatar where user.id =:UUID")
     void updateAvatarByUUID(@Param("UUID") String userUUID, @Param("avatar") String newAvatar);
+
 }
