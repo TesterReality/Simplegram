@@ -77,4 +77,25 @@ public class ExceptionAdviceUnitTest {
         test.errorAnswer(new BadRequestException("exception.loginAlreadyTaken"));
         verify(messageSource).getMessage(eq("exception.loginAlreadyTaken"),any(), any(Locale.class));
     }
+
+    @Test
+    public void invalidDataAnswer_hasSomeFieldError_bodyHasFieldErrorMessage() {
+        MessageSource messageSource = mock(MessageSource.class);
+        FieldError fieldError = mock(FieldError.class);
+        BindingResult bindingResult = mock(BindingResult.class);
+
+        ExceptionAdvice test = new ExceptionAdvice(messageSource);
+        List<FieldError> testField = new ArrayList<>();
+        testField.add(fieldError);
+
+        when(bindingResult.getFieldErrors()).thenReturn(testField);
+        when(fieldError.getField()).thenReturn("username");
+        when(fieldError.getDefaultMessage()).thenReturn("invalid username");
+
+        ResponseEntity<ExceptionResponse> answer = test.invalidDataAnswer(new MethodArgumentNotValidException(null,bindingResult));
+
+        String answerBody = answer.getBody().getValidation().get("username");
+
+        Assert.assertEquals("invalid username", answerBody);
+    }
 }
