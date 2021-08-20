@@ -1,0 +1,52 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-3
+      author: vlad
+      changes:
+        - createTable:
+            tableName: chat_message
+            remarks: Сообщения чата
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: chat_message_pkey
+                    nullable: false
+              - column:
+                  name: id_chat
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: id_sender
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: message
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: date
+                  type: timestamp without time zone
+                    defaultValue: now()
+                    constraints:
+                      nullable: false
+              - column:
+                  name: date_delete
+                  type: timestamp without time zone
+                    constraints:
+                      nullable: true

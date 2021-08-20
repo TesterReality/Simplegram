@@ -5,3 +5,9 @@ databaseChangeLog:
       file: classpath:liquibase/app_1_create_table_users.yml
   - include:
       file: classpath:liquibase/app_2_add_column_to_user_table.yml
+  - include:
+      file: classpath:liquibase/app_3_create_table_chat_room.yml
+  - include:
+      file: classpath:liquibase/app_4_create_table_chat_member.yml
+  - include:
+      file: classpath:liquibase/app_5_create_table_chat_message.yml
