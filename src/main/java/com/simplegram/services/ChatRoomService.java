@@ -27,4 +27,13 @@ public class ChatRoomService {
         return chatRoomRepository.existsById(uuid);
     }
 
+    public void addUserFromLoginToRoom(String userLogin)
+    {
+
+    }
+
+    public boolean isUserAlreadyExistsInRoom(String userLogin,String roomUuid)
+    {
+        return false;
+    }
 }

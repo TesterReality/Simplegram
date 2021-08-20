@@ -35,4 +35,9 @@ public class ChatMemberService {
     public List<String> getAllRoomIDByUserID(String userUUID) {
         return chatMemberRepository.findAllRoomIDByUserUUID(userUUID);
     }
+
+    public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userLogin)
+    {
+        return chatMemberRepository.isUserAlreadyExitsInChat(chatRoomUUID,userLogin);
+    }
 }
