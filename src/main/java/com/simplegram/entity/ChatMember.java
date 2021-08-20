@@ -21,8 +21,10 @@ public class ChatMember {
     private Long id;
 
     @NotBlank
-    private String id_user;
+    @Column(name = "id_user")
+    private String idUser;
 
     @NotBlank
-    private String id_chat;
+    @Column(name = "id_chat")
+    private String idChat;
 }
