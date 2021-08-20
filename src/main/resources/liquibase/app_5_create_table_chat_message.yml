@@ -42,11 +42,12 @@ databaseChangeLog:
               - column:
                   name: date
                   type: timestamp without time zone
-                    defaultValue: now()
-                    constraints:
-                      nullable: false
+                  constraints:
+                    unique: false
+                    nullable: false
+                  defaultValue: now()
               - column:
                   name: date_delete
                   type: timestamp without time zone
-                    constraints:
-                      nullable: true
+                  constraints:
+                    nullable: true

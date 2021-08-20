@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, UUID> {
 
+    Boolean existsById(String uuid);
 }

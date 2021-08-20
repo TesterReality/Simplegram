@@ -10,7 +10,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int4
+                  type: int8
                   constraints:
                     primaryKey: true
                     primaryKeyName: chat_member_pkey

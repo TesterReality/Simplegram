@@ -22,4 +22,9 @@ public class ChatRoomService {
         chatMemberService.saveChatMember(chatMember);
     }
 
+    public boolean isChatRoomExist(String uuid)
+    {
+        return chatRoomRepository.existsById(uuid);
+    }
+
 }
