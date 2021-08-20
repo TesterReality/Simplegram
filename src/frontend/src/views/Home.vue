@@ -190,7 +190,7 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit" :disabled="connected == true" @click.prevent="connect">Connect</button>
+                    <button id="connect" class="btn btn-default" type="submit" :disabled="connected == true" @click.prevent="testChat">Connect</button>
                     <button id="disconnect" class="btn btn-default" type="submit" :disabled="connected == false" @click.prevent="disconnect">Disconnect
                     </button>
                 </div>
@@ -388,6 +388,21 @@
             },
             tickleConnection() {
                 this.connected ? this.disconnect() : this.connect();
+            },
+            testChat()
+            {
+                UserService.test().then(
+                    response => {
+                        this.content = response.data;
+                        console.log(response.data);
+                    },
+                    error => {
+                        this.content =
+                            (error.response && error.response.data && error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+                    }
+                );
             }
         }
 

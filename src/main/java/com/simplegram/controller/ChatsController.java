@@ -1,15 +1,15 @@
 package com.simplegram.controller;
 
 import com.simplegram.security.jwt.AuthTokenFilter;
+import com.simplegram.security.services.UserDetailsImpl;
 import com.simplegram.services.ChatMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -19,12 +19,14 @@ public class ChatsController {
     private final ChatMemberService chatMemberService;
     private final AuthTokenFilter authTokenFilter;
 
-    @PostMapping("/getChat")
-    // public ResponseEntity authenticateUser(@RequestParam(name = "userlogin") String userLogin) {
+   // @PostMapping("/getChat")
+    @GetMapping("/getChat")
+    @PreAuthorize("isAuthenticated()")
+    //public ResponseEntity authenticateUser(@RequestParam String login) {
     public ResponseEntity authenticateUser() {
 
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String hh = userDetails.getUsername();
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     //   String hh = userDetails.getUsername();
         // List<String> allUserChatsID = chatMemberService.getAllRoomIDByUserID(hh.getId());
         //authTokenFilter.
         /*
@@ -38,7 +40,7 @@ public class ChatsController {
         String test = "fdfd";
 
         return ResponseEntity
-                .badRequest()
-                .body("d");
+                .ok()
+                .body(userDetails.getLogin());
     }
 }
