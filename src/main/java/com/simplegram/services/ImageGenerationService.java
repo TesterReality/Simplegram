@@ -39,7 +39,7 @@ public class ImageGenerationService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     @SneakyThrows({IOException.class})
     public void loadAvatarFromUrl(String userLogin, String userId) {
         String userAvatarName = UUID.randomUUID().toString().concat(".png");
