@@ -13,3 +13,5 @@ databaseChangeLog:
       file: classpath:liquibase/app_5_create_table_chat_message.yml
   - include:
       file: classpath:liquibase/app_6_create_table_message_status.yml
+  - include:
+      file: classpath:liquibase/app_7_create_table_chat_message_attachments.yml

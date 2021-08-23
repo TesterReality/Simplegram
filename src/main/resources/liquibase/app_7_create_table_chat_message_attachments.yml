@@ -1,0 +1,35 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-3
+      author: vlad
+      changes:
+        - createTable:
+            tableName: chat_message_attachments
+            remarks: Вложения в сообщениях
+            columns:
+              - column:
+                  name: id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: chat_message_attachments_pkey
+                    nullable: false
+              - column:
+                  name: id_message
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: url
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+                    nullable: false
