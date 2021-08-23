@@ -12,8 +12,6 @@ databaseChangeLog:
                   name: id
                   type: int8
                   constraints:
-                    primaryKey: true
-                    primaryKeyName: chat_member_pkey
                     nullable: false
               - column:
                   name: id_user

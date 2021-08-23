@@ -21,7 +21,7 @@ public class ChatRoomService {
 
         ChatMember chatMember = new ChatMember();
         chatMember.setIdChat(chatRoom.getId());
-        chatMember.setIdUser(chatRoom.getCreator());
+        chatMember.setIdUser(chatRoom.getCreator().getId());
 
         chatMemberService.saveChatMember(chatMember);
     }

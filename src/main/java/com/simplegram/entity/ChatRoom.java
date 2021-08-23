@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,12 +17,14 @@ import java.util.UUID;
 @Table(name = "chat_room")
 public class ChatRoom {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false, insertable = false)
     private String id = UUID.randomUUID().toString();
 
     @Size(min = 3, max = 255)
     private String name;
 
-    @NotNull
-    private String creator;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private User creator;
+
 }

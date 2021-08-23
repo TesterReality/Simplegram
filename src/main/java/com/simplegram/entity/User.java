@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,7 +18,7 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false, insertable = false)
     private String id = UUID.randomUUID().toString();
 
     @NotBlank
@@ -42,6 +39,9 @@ public class User {
     @NotNull
     @Column(name = "online_date")
     private LocalDateTime onlineDate;
+
+    @OneToMany(mappedBy = "creator",cascade = CascadeType.ALL)
+    Set<ChatRoom> CreatorChatRooms = new HashSet<>();
 
     public User() {
     }

@@ -80,6 +80,7 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
             throw new BadRequestException("exception.loginAlreadyTaken");
         }
+        System.out.println(signupRequest.getLogin());
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setLogin(signupRequest.getLogin());
@@ -111,7 +112,7 @@ public class AuthController {
         //
 
         ChatRoom chat = new ChatRoom();
-        chat.setCreator(user.getId());
+        chat.setCreator(user);
         chat.setName("testChat");
         chatRoomService.createChatRoom(chat);
 

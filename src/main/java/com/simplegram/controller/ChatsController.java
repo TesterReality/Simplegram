@@ -12,9 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,4 +55,17 @@ public class ChatsController {
                 .ok()
                 .body(userDetails.getLogin());
     }
+
+    @PostMapping("/send")
+    @PreAuthorize("isAuthenticated()")
+    //Здесь отправляю сообщения для чата
+    public ResponseEntity sendMessagetoGroupChat(@RequestParam("peers") String roomID, @RequestParam("message") String message) {
+
+        String test = "fdfd";
+
+        return ResponseEntity
+                .ok()
+                .body(roomID);
+    }
+
 }
