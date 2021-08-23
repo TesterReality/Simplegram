@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,4 +29,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return UserDetailsImpl.build(user);
     }
+
+    public boolean existsByLogin(String login)
+    {
+        return userRepository.existsByLogin(login);
+    }
+
+    public Optional<User> findByLogin(String login)
+    {
+        return userRepository.findByLogin(login);
+    }
+
+    public User findById(String userId)
+    {
+        return userRepository.findById(userId);
+    }
+
 }

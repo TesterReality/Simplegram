@@ -20,11 +20,11 @@ public class ChatMemberService {
         chatMemberRepository.save(chatMember);
     }
 
-    public List<User> getAllUserByRoomID(String chatRoomUUID) {
+    public List<User> getAllUserByRoomID(String chatRoomId) {
         List<String> allUserIDInRoom;
         List<User> allUserInRoom = new ArrayList<>();
 
-        allUserIDInRoom = chatMemberRepository.findUsersIDByChatRoomID(chatRoomUUID);
+        allUserIDInRoom = chatMemberRepository.findUsersIDByChatRoomID(chatRoomId);
 
         for (String s : allUserIDInRoom) {
             allUserInRoom.add(userRepository.findById(s));
@@ -32,12 +32,22 @@ public class ChatMemberService {
         return allUserInRoom;
     }
 
-    public List<String> getAllRoomIDByUserID(String userUUID) {
-        return chatMemberRepository.findAllRoomIDByUserUUID(userUUID);
+    public List<String> getAllRoomIDByUserID(String userId) {
+        return chatMemberRepository.findAllRoomIDByUserUUID(userId);
     }
 
     public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userLogin)
     {
         return chatMemberRepository.isUserAlreadyExitsInChat(chatRoomUUID,userLogin);
+    }
+
+    public int getCountUsersInRoom(String roomID)
+    {
+        return chatMemberRepository.getCountUsersInRoom(roomID);
+    }
+
+    public String getOtherUserInRoom(String roomId, String userId)
+    {
+        return chatMemberRepository.getOtherUserInRoom(roomId,userId);
     }
 }

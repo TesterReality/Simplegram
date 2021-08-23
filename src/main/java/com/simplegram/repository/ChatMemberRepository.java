@@ -18,4 +18,10 @@ public interface ChatMemberRepository extends JpaRepository<ChatMember, Long> {
 
     @Query("select new java.lang.Boolean(count(*) > 0) from ChatMember c where c.idUser =(select u.id from User u where u.login = :userLogin)  AND  c.idChat=:chatRoomID ")
     Boolean isUserAlreadyExitsInChat(@Param("chatRoomID") String chatRoomUUID,@Param("userLogin") String userLogin);
+
+    @Query("select count(*) from ChatMember b where b.idChat = :chatRoomID")
+    int getCountUsersInRoom(@Param("chatRoomID") String chatRoomUUID);
+
+    @Query("select b.idUser from ChatMember b where b.idChat = :chatRoomID and b.idUser <> :userID")
+    String getOtherUserInRoom(@Param("chatRoomID") String chatRoomUUID,@Param("userID") String userId);
 }
