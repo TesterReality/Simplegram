@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface MessageStatusRepository extends JpaRepository<MessageStatus, UUID> {
 
-    @Query("select count(*) from MessageStatus m where m.messageId=( select b.id from ChatMessage b where b.chatId = :roomId) AND m.status = 'UNREAD' AND  m.userId=:userId")
+    @Query("select count(*) from MessageStatus m where m.message=( select b from ChatMessage b where b.id = :roomId) AND m.status = 'UNREAD' AND  m.user.id=:userId")
     int getCountUnreadMessageByRoomId(@Param("roomId") String uuid,@Param("userId") String userId);
 }

@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
@@ -21,13 +18,13 @@ public class MessageStatus {
     @Column(name = "id", updatable = false, nullable = false)
     private String id = UUID.randomUUID().toString();
 
-    @NotBlank
-    @Column(name = "id_message")
-    private String messageId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_message")
+    private ChatMessage message;
 
-    @NotBlank
-    @Column(name = "id_user")
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user")
+    private User user;
 
     @NotBlank
     private String status;

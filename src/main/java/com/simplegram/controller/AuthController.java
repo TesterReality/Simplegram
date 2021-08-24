@@ -123,8 +123,8 @@ public class AuthController {
         chatRoomService.addUsersFromLoginToChatRoom(chat.getId(), testLogin);
 
         ChatMessage message = new ChatMessage();
-        message.setChatId(chat.getId());
-        message.setSenderId(user.getId());
+        message.setChatRoom(chat);
+        message.setUserSender(user);
         message.setMessage("testMessage");
         message.setType(ChatMessageType.UNREAD.toString());
         message.setDate(LocalDateTime.now());
@@ -132,7 +132,7 @@ public class AuthController {
         chatMessageService.saveChatMessage(message);
 
         ChatMessageAttachments attachments = new ChatMessageAttachments();
-        attachments.setIdMessage(message.getId());
+        attachments.setMessage(message);
         attachments.setUrl("test.png");
         attachments.setType(ChatMessageAttachmentsType.IMAGE.toString());
 

@@ -10,10 +10,10 @@ import java.util.UUID;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> {
 
-    @Query("select b.message from ChatMessage b where b.date = (select max(b.date) from ChatMessage b where b.chatId = :roomId)")
+    @Query("select b.message from ChatMessage b where b.date = (select max(b.date) from ChatMessage b where b.chatRoom.id = :roomId)")
     String getLastMessage(@Param("roomId") String roomId);
 
-    @Query("select max(b.date) from ChatMessage b where b.chatId = :roomId")
+    @Query("select max(b.date) from ChatMessage b where b.chatRoom.id = :roomId")
     LocalDateTime getDateLastMessage(@Param("roomId") String roomId);
 
 

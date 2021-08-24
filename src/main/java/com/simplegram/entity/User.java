@@ -41,7 +41,20 @@ public class User {
     private LocalDateTime onlineDate;
 
     @OneToMany(mappedBy = "creator",cascade = CascadeType.ALL)
-    Set<ChatRoom> CreatorChatRooms = new HashSet<>();
+    Set<ChatRoom> creatorChatRooms = new HashSet<>();
+
+    @OneToMany(mappedBy = "userSender",cascade = CascadeType.ALL)
+    Set<ChatMessage> userMessage = new HashSet<>();
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    Set<MessageStatus> messageStatuses = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "chat_member",
+            joinColumns = @JoinColumn(name = "id_user"),
+            inverseJoinColumns = @JoinColumn(name = "id_chat"))
+    Set<ChatRoom> usersChats;
 
     public User() {
     }

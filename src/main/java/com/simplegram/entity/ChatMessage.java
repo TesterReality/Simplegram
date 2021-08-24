@@ -9,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -21,13 +23,14 @@ public class ChatMessage {
     @Column(name = "id", updatable = false, nullable = false)
     private String id = UUID.randomUUID().toString();
 
-    @NotBlank
-    @Column(name = "id_chat")
-    private String chatId;
 
-    @NotBlank
-    @Column(name = "id_sender")
-    private String senderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_chat")
+    private ChatRoom chatRoom;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_sender")
+    private User userSender;
 
     @NotBlank
     private String message;
@@ -41,4 +44,10 @@ public class ChatMessage {
 
     @Column(name = "date_delete")
     private LocalDateTime dateDelete;
+
+    @OneToMany(mappedBy = "message",cascade = CascadeType.ALL)
+    Set<ChatMessageAttachments> messageAttachments = new HashSet<>();
+
+    @OneToMany(mappedBy = "message",cascade = CascadeType.ALL)
+    Set<MessageStatus> messageStatuses = new HashSet<>();
 }

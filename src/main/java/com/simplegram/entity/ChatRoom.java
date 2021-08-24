@@ -7,7 +7,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -24,7 +26,12 @@ public class ChatRoom {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "creator")
     private User creator;
 
+    @ManyToMany(mappedBy = "usersChats")
+    Set<User> users;
+
+    @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)
+    Set<ChatMessage> chatMessages = new HashSet<>();
 }
