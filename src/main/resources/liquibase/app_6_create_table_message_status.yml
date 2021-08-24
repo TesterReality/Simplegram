@@ -12,8 +12,6 @@ databaseChangeLog:
                   name: id
                   type: varchar(255)
                   constraints:
-                    primaryKey: true
-                    primaryKeyName: message_status_pkey
                     nullable: false
               - column:
                   name: id_message

@@ -1,6 +1,7 @@
 package com.simplegram.services;
 
 import com.simplegram.entity.ChatMember;
+import com.simplegram.entity.ChatRoom;
 import com.simplegram.entity.User;
 import com.simplegram.repository.ChatMemberRepository;
 import com.simplegram.repository.UserRepository;
@@ -21,33 +22,34 @@ public class ChatMemberService {
     }
 
     public List<User> getAllUserByRoomID(String chatRoomId) {
-        List<String> allUserIDInRoom;
+        List<ChatMember> allUserIDInRoom;
         List<User> allUserInRoom = new ArrayList<>();
 
-        allUserIDInRoom = chatMemberRepository.findUsersIDByChatRoomID(chatRoomId);
+        allUserIDInRoom = chatMemberRepository.findAllIdUserByIdChat(chatRoomId);
 
-        for (String s : allUserIDInRoom) {
-            allUserInRoom.add(userRepository.findById(s));
+        for (ChatMember s : allUserIDInRoom) {
+            allUserInRoom.add(userRepository.findById(s.getIdUser()));
         }
         return allUserInRoom;
     }
 
-    public List<String> getAllRoomIDByUserID(String userId) {
-        return chatMemberRepository.findAllRoomIDByUserUUID(userId);
-    }
-
-    public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userLogin)
+    public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userId)
     {
-        return chatMemberRepository.isUserAlreadyExitsInChat(chatRoomUUID,userLogin);
+        return chatMemberRepository.findAllByIdUserAndIdChat(userId, chatRoomUUID).size()>0;
     }
 
     public int getCountUsersInRoom(String roomID)
     {
-        return chatMemberRepository.getCountUsersInRoom(roomID);
+        return chatMemberRepository.findAllIdUserByIdChat(roomID).size();
     }
 
     public String getOtherUserInRoom(String roomId, String userId)
     {
-        return chatMemberRepository.getOtherUserInRoom(roomId,userId);
+        return chatMemberRepository.findAllByIdChatAndIdUserNotContaining(roomId,userId).get(0).getIdUser();
+    }
+
+    public List<ChatMember> getAllRoomIDByUserID(String userId)
+    {
+        return chatMemberRepository.findAllIdChatByIdUser(userId);
     }
 }

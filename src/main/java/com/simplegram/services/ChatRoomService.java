@@ -21,7 +21,7 @@ public class ChatRoomService {
 
         ChatMember chatMember = new ChatMember();
         chatMember.setIdChat(chatRoom.getId());
-        chatMember.setIdUser(chatRoom.getCreator());
+        chatMember.setIdUser(chatRoom.getCreator().getId());
 
         chatMemberService.saveChatMember(chatMember);
     }
@@ -45,7 +45,7 @@ public class ChatRoomService {
         int countRoomUsers = chatMemberService.getCountUsersInRoom(roomId);
         if(countRoomUsers>2)
         {
-            return chatRoomRepository.getRoomNameById(roomId);
+            return chatRoomRepository.getChatRoomById(roomId).getName();
         }
         return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId,userId)).getLogin();
     }

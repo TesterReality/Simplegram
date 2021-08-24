@@ -80,6 +80,7 @@ public class AuthController {
         if (userRepository.existsByLogin(signupRequest.getLogin())) {
             throw new BadRequestException("exception.loginAlreadyTaken");
         }
+        System.out.println(signupRequest.getLogin());
         User user = new User();
         user.setUsername(signupRequest.getUsername());
         user.setLogin(signupRequest.getLogin());
@@ -111,19 +112,19 @@ public class AuthController {
         //
 
         ChatRoom chat = new ChatRoom();
-        chat.setCreator(user.getId());
+        chat.setCreator(user);
         chat.setName("testChat");
         chatRoomService.createChatRoom(chat);
 
         List<String> testLogin = new ArrayList<>();
         testLogin.add("dudos");
-        testLogin.add("memes");
+        testLogin.add("dsgsdgedddrwesdgsdg");
 
         chatRoomService.addUsersFromLoginToChatRoom(chat.getId(), testLogin);
 
         ChatMessage message = new ChatMessage();
-        message.setChatId(chat.getId());
-        message.setSenderId(user.getId());
+        message.setChatRoom(chat);
+        message.setUserSender(user);
         message.setMessage("testMessage");
         message.setType(ChatMessageType.UNREAD.toString());
         message.setDate(LocalDateTime.now());
@@ -131,7 +132,7 @@ public class AuthController {
         chatMessageService.saveChatMessage(message);
 
         ChatMessageAttachments attachments = new ChatMessageAttachments();
-        attachments.setIdMessage(message.getId());
+        attachments.setMessage(message);
         attachments.setUrl("test.png");
         attachments.setType(ChatMessageAttachmentsType.IMAGE.toString());
 
@@ -145,10 +146,8 @@ public class AuthController {
 
         chatMemberService.saveChatMember(chatMember);*/
 
-        List<String> list = new ArrayList<>();
-        list = chatMemberService.getAllRoomIDByUserID(user.getId());
 
-        boolean tes1 = chatMemberService.isUserAlreadyExitsInChat(chat.getId(), user.getLogin());
+        boolean tes1 = chatMemberService.isUserAlreadyExitsInChat(chat.getId(), user.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -22,23 +22,18 @@ public class ChatMessageService {
     {
         chatMessageRepository.save(chatMessage);
 
-        List<User> allUsersInRoom = chatMemberService.getAllUserByRoomID(chatMessage.getChatId());
+        List<User> allUsersInRoom = chatMemberService.getAllUserByRoomID(chatMessage.getChatRoom().getId());
         for (User user : allUsersInRoom) {
             MessageStatus userMessageStatus = new MessageStatus();
-            userMessageStatus.setMessageId(chatMessage.getId());
-            userMessageStatus.setUserId(user.getId());
+            userMessageStatus.setMessage(chatMessage);
+            userMessageStatus.setUser(user);
             userMessageStatus.setStatus(ChatMessageType.UNREAD.toString());
             messageStatusService.createMessageStatus(userMessageStatus);
         }
     }
 
-    public String getLastMessageFromRoomId(String roomId)
+    public ChatMessage getLastMessageByRoomId(String roomId)
     {
-        return chatMessageRepository.getLastMessage(roomId);
-    }
-
-    public LocalDateTime getDateLastMessageFromRoomId(String roomId)
-    {
-        return chatMessageRepository.getDateLastMessage(roomId);
+        return chatMessageRepository.findFirstByChatRoomIdOrderByDateDesc(roomId);
     }
 }
