@@ -48,7 +48,7 @@ public class ChatMemberService {
         return chatMemberRepository.findAllByIdChatAndIdUserNotContaining(roomId,userId).get(0).getIdUser();
     }
 
-    public List<ChatMember> test(String userId)
+    public List<ChatMember> getAllRoomIDByUserID(String userId)
     {
         return chatMemberRepository.findAllIdChatByIdUser(userId);
     }

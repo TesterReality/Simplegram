@@ -1,15 +1,12 @@
 package com.simplegram.repository;
 
-import com.simplegram.entity.ChatMessage;
 import com.simplegram.entity.MessageStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface MessageStatusRepository extends JpaRepository<MessageStatus, UUID> {
-
-    @Query("select count(*) from MessageStatus m where m.message=( select b from ChatMessage b where b.id = :roomId) AND m.status = 'UNREAD' AND  m.user.id=:userId")
-    int getCountUnreadMessageByRoomId(@Param("roomId") String uuid,@Param("userId") String userId);
+public interface MessageStatusRepository extends JpaRepository<MessageStatus, UUID>, JpaSpecificationExecutor<MessageStatus> {
+    List<MessageStatus> findAllByMessage_ChatRoom_IdAndUser_IdAndStatusEquals(String roomId, String userId, String status);
 }

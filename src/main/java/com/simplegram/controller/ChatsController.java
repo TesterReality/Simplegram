@@ -5,10 +5,7 @@ import com.simplegram.entity.ChatRoom;
 import com.simplegram.payload.response.GetChatResponse;
 import com.simplegram.security.jwt.AuthTokenFilter;
 import com.simplegram.security.services.UserDetailsImpl;
-import com.simplegram.services.ChatMemberService;
-import com.simplegram.services.ChatMessageService;
-import com.simplegram.services.ChatRoomService;
-import com.simplegram.services.MessageStatusService;
+import com.simplegram.services.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -28,35 +25,29 @@ public class ChatsController {
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final MessageStatusService messageStatusService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @GetMapping("/getChat")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity authenticateUser() {
-
         List<GetChatResponse> responseAllChat = new ArrayList<>();
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       // List<String> usersRoomId = chatMemberService.getAllRoomIDByUserID(userDetails.getId());
-            List<ChatMember> test = chatMemberService.test(userDetails.getId());
+        List<ChatMember> usersRoom = chatMemberService.getAllRoomIDByUserID(userDetails.getId());
 
-        for (ChatMember chatRoom : test) {
-            System.out.println(chatRoom);
-        }
-
-        for (ChatMember chatMember : test) {
+        for (ChatMember chatMember : usersRoom) {
             GetChatResponse chat = new GetChatResponse();
-            chat.setTitle(chatRoomService.getTitleOfRoomId(chatMember.getIdChat(),userDetails.getId()));
+            chat.setTitle(chatRoomService.getTitleOfRoomId(chatMember.getIdChat(), userDetails.getId()));
             chat.setLastMessage(chatMessageService.getLastMessageByRoomId(chatMember.getIdChat()).getMessage());
             chat.setTimeLastMessage(chatMessageService.getLastMessageByRoomId(chatMember.getIdChat()).getDate());
             chat.setGroup(chatRoomService.isGroupChat(chatMember.getIdChat()));
-            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(chatMember.getIdChat(),userDetails.getId()));
+            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(chatMember.getIdChat(), userDetails.getId()));
             chat.setChatId(chatMember.getIdChat());
-
+            if (!chat.isGroup())//значит приватный чат
+                chat.setAvatars(userDetailsService.findByLogin(chat.getTitle()).get().getAvatar());
 
             responseAllChat.add(chat);
         }
-
-        String test1 = "fdfd";
 
         return ResponseEntity
                 .ok()

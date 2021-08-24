@@ -24,5 +24,4 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Transactional
     @Query("update User user set user.avatar =:avatar where user.id =:UUID")
     void updateAvatarByUUID(@Param("UUID") String userUUID, @Param("avatar") String newAvatar);
-
 }

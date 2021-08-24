@@ -5,6 +5,8 @@ import com.simplegram.repository.MessageStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MessageStatusService {
@@ -17,6 +19,6 @@ public class MessageStatusService {
 
     public int getCountUnreadMessageByRoomId(String roomID, String userId)
     {
-        return messageStatusRepository.getCountUnreadMessageByRoomId(roomID, userId);
+        return messageStatusRepository.findAllByMessage_ChatRoom_IdAndUser_IdAndStatusEquals(roomID,userId,"UNREAD").size();
     }
 }

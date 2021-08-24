@@ -1,6 +1,7 @@
 package com.simplegram.services;
 
 import com.simplegram.config.ConfigProperties;
+import com.simplegram.entity.User;
 import com.simplegram.repository.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -56,13 +57,17 @@ public class ImageGenerationService {
         restTemplate.getMessageConverters().add(
                 new ByteArrayHttpMessageConverter());
 
-        ResponseEntity<byte[]> responseEntity= restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
+        ResponseEntity<byte[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, byte[].class);
 
-        try(InputStream in = new ByteArrayResource(responseEntity.getBody()).getInputStream()) {
+        try (InputStream in = new ByteArrayResource(responseEntity.getBody()).getInputStream()) {
             try (FileOutputStream out = new FileOutputStream(userAvatarsDir)) {
                 IOUtils.copy(in, out);
             }
         }
-        userRepository.updateAvatarByUUID(userId, userAvatarName);
+        User user = userRepository.findById(userId);
+        user.setAvatar(userAvatarName);
+
+        userRepository.save(user);
+        //userRepository.updateAvatarByUUID(userId, userAvatarName);
     }
 }

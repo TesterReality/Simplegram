@@ -45,9 +45,8 @@ public class ChatRoomService {
         int countRoomUsers = chatMemberService.getCountUsersInRoom(roomId);
         if(countRoomUsers>2)
         {
-            return chatRoomRepository.getRoomNameById(roomId);
+            return chatRoomRepository.getChatRoomById(roomId).getName();
         }
-        String userIdd = chatMemberService.getOtherUserInRoom(roomId,userId);
         return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId,userId)).getLogin();
     }
 
