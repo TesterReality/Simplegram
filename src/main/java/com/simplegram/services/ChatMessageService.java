@@ -32,13 +32,8 @@ public class ChatMessageService {
         }
     }
 
-    public String getLastMessageFromRoomId(String roomId)
+    public ChatMessage getLastMessageByRoomId(String roomId)
     {
-        return chatMessageRepository.getLastMessage(roomId);
-    }
-
-    public LocalDateTime getDateLastMessageFromRoomId(String roomId)
-    {
-        return chatMessageRepository.getDateLastMessage(roomId);
+        return chatMessageRepository.findFirstByChatRoomIdOrderByDateDesc(roomId);
     }
 }

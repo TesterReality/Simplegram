@@ -118,7 +118,7 @@ public class AuthController {
 
         List<String> testLogin = new ArrayList<>();
         testLogin.add("dudos");
-        testLogin.add("memes");
+        testLogin.add("dsgsdgedddrwesdgsdg");
 
         chatRoomService.addUsersFromLoginToChatRoom(chat.getId(), testLogin);
 
@@ -146,10 +146,8 @@ public class AuthController {
 
         chatMemberService.saveChatMember(chatMember);*/
 
-        List<String> list = new ArrayList<>();
-        list = chatMemberService.getAllRoomIDByUserID(user.getId());
 
-        boolean tes1 = chatMemberService.isUserAlreadyExitsInChat(chat.getId(), user.getLogin());
+        boolean tes1 = chatMemberService.isUserAlreadyExitsInChat(chat.getId(), user.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

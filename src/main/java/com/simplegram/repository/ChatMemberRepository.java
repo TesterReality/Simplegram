@@ -1,26 +1,26 @@
 package com.simplegram.repository;
 
 import com.simplegram.entity.ChatMember;
+import com.simplegram.entity.ChatMessage;
+import com.simplegram.entity.ChatRoom;
 import com.simplegram.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.List;
 
-public interface ChatMemberRepository extends JpaRepository<ChatMember, Long> {
+public interface ChatMemberRepository extends JpaRepository<ChatMember, Long>, JpaSpecificationExecutor<ChatMember> {
 
-    @Query("select b.idChat from ChatMember b where b.idUser = :uuid")
-    List<String> findAllRoomIDByUserUUID(@Param("uuid") String userUUID);
+    List<ChatMember> findAllIdChatByIdUser(String userId);
 
-    @Query("select b.idUser from ChatMember b where b.idChat = :chatRoomID")
-    List<String> findUsersIDByChatRoomID(@Param("chatRoomID") String chatRoomUUID);
+    List<ChatMember> findAllIdUserByIdChat(String chatRoomId);
 
-    @Query("select new java.lang.Boolean(count(*) > 0) from ChatMember c where c.idUser =(select u.id from User u where u.login = :userLogin)  AND  c.idChat=:chatRoomID ")
-    Boolean isUserAlreadyExitsInChat(@Param("chatRoomID") String chatRoomUUID,@Param("userLogin") String userLogin);
+    List<ChatMember> findAllByIdUserAndIdChat(String userId,String chatRoomId);
 
-    @Query("select count(*) from ChatMember b where b.idChat = :chatRoomID")
-    int getCountUsersInRoom(@Param("chatRoomID") String chatRoomUUID);
+    List<ChatMember> findAllByIdChatAndIdUserNotContaining(String chatRoomId,String userId);
 
     @Query("select b.idUser from ChatMember b where b.idChat = :chatRoomID and b.idUser <> :userID")
     String getOtherUserInRoom(@Param("chatRoomID") String chatRoomUUID,@Param("userID") String userId);

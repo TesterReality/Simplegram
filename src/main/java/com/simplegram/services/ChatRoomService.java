@@ -47,6 +47,7 @@ public class ChatRoomService {
         {
             return chatRoomRepository.getRoomNameById(roomId);
         }
+        String userIdd = chatMemberService.getOtherUserInRoom(roomId,userId);
         return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId,userId)).getLogin();
     }
 

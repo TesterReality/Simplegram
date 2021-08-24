@@ -1,5 +1,7 @@
 package com.simplegram.controller;
 
+import com.simplegram.entity.ChatMember;
+import com.simplegram.entity.ChatRoom;
 import com.simplegram.payload.response.GetChatResponse;
 import com.simplegram.security.jwt.AuthTokenFilter;
 import com.simplegram.security.services.UserDetailsImpl;
@@ -34,22 +36,27 @@ public class ChatsController {
         List<GetChatResponse> responseAllChat = new ArrayList<>();
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<String> usersRoomId = chatMemberService.getAllRoomIDByUserID(userDetails.getId());
+       // List<String> usersRoomId = chatMemberService.getAllRoomIDByUserID(userDetails.getId());
+            List<ChatMember> test = chatMemberService.test(userDetails.getId());
 
-        for (String roomId : usersRoomId) {
+        for (ChatMember chatRoom : test) {
+            System.out.println(chatRoom);
+        }
+
+        for (ChatMember chatMember : test) {
             GetChatResponse chat = new GetChatResponse();
-            chat.setTitle(chatRoomService.getTitleOfRoomId(roomId,userDetails.getId()));
-            chat.setLastMessage(chatMessageService.getLastMessageFromRoomId(roomId));
-            chat.setTimeLastMessage(chatMessageService.getDateLastMessageFromRoomId(roomId));
-            chat.setGroup(chatRoomService.isGroupChat(roomId));
-            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(roomId,userDetails.getId()));
-            chat.setChatId(roomId);
+            chat.setTitle(chatRoomService.getTitleOfRoomId(chatMember.getIdChat(),userDetails.getId()));
+            chat.setLastMessage(chatMessageService.getLastMessageByRoomId(chatMember.getIdChat()).getMessage());
+            chat.setTimeLastMessage(chatMessageService.getLastMessageByRoomId(chatMember.getIdChat()).getDate());
+            chat.setGroup(chatRoomService.isGroupChat(chatMember.getIdChat()));
+            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(chatMember.getIdChat(),userDetails.getId()));
+            chat.setChatId(chatMember.getIdChat());
 
 
             responseAllChat.add(chat);
         }
 
-        String test = "fdfd";
+        String test1 = "fdfd";
 
         return ResponseEntity
                 .ok()
