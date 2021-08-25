@@ -3,7 +3,6 @@ package com.simplegram.services;
 import com.simplegram.entity.ChatMember;
 import com.simplegram.entity.ChatRoom;
 import com.simplegram.repository.ChatRoomRepository;
-import com.simplegram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,17 +40,14 @@ public class ChatRoomService {
         return chatRoomRepository.existsById(uuid);
     }
 
-    public String getTitleOfRoomId(String roomId,String userId) {
-        int countRoomUsers = chatMemberService.getCountUsersInRoom(roomId);
-        if(countRoomUsers>2)
-        {
+    public String getTitleOfRoomId(String roomId, String userId) {
+        if(isGroupChat(roomId)){
             return chatRoomRepository.getChatRoomById(roomId).getName();
         }
-        return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId,userId)).getLogin();
+        return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId, userId)).getLogin();
     }
 
-    public boolean isGroupChat(String roomId)
-    {
+    public boolean isGroupChat(String roomId) {
         int countRoomUsers = chatMemberService.getCountUsersInRoom(roomId);
         return countRoomUsers > 2;
     }

@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface MessageStatusRepository extends JpaRepository<MessageStatus, UUID>, JpaSpecificationExecutor<MessageStatus> {
     List<MessageStatus> findAllByMessage_ChatRoom_IdAndUser_IdAndStatusEquals(String roomId, String userId, String status);
+    MessageStatus getMessageStatus_StatusByMessage_IdAndUser_Id(String messageId,String userId);
 }
