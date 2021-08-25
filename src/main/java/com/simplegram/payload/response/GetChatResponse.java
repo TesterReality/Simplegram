@@ -15,4 +15,5 @@ public class GetChatResponse {
     private int countUnreadMessage;
     private String chatId;
     private String avatars;
+    private LocalDateTime lastOnlineData;
 }

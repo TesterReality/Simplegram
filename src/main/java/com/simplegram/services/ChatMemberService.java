@@ -1,11 +1,12 @@
 package com.simplegram.services;
 
 import com.simplegram.entity.ChatMember;
-import com.simplegram.entity.ChatRoom;
+import com.simplegram.entity.ChatMessage;
 import com.simplegram.entity.User;
 import com.simplegram.repository.ChatMemberRepository;
 import com.simplegram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,23 +34,30 @@ public class ChatMemberService {
         return allUserInRoom;
     }
 
-    public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userId)
-    {
-        return chatMemberRepository.findAllByIdUserAndIdChat(userId, chatRoomUUID).size()>0;
+    public boolean isUserAlreadyExitsInChat(String chatRoomUUID, String userId) {
+        return chatMemberRepository.findAllByIdUserAndIdChat(userId, chatRoomUUID).size() > 0;
     }
 
-    public int getCountUsersInRoom(String roomID)
-    {
+    public int getCountUsersInRoom(String roomID) {
         return chatMemberRepository.findAllIdUserByIdChat(roomID).size();
     }
 
-    public String getOtherUserInRoom(String roomId, String userId)
-    {
-        return chatMemberRepository.findAllByIdChatAndIdUserNotContaining(roomId,userId).get(0).getIdUser();
+    public String getOtherUserInRoom(String roomId, String userId) {
+        return chatMemberRepository.findAllByIdChatAndIdUserNotContaining(roomId, userId).get(0).getIdUser();
     }
 
-    public List<ChatMember> getAllRoomIDByUserID(String userId)
-    {
-        return chatMemberRepository.findAllIdChatByIdUser(userId);
+    public List<ChatMember> getAllRoomIDByUserID(String userId) {
+
+        List<ChatMessage> test = chatMemberRepository.test(userId, PageRequest.of(0, 10));
+
+        for (ChatMessage s : test) {
+            System.out.println(s);
+        }
+
+        return chatMemberRepository.findAllIdChatByIdUser(userId, PageRequest.of(0, 10));
+    }
+
+    public List<ChatMessage> getAllSortedByDateMessageInRoom(String roomId, int StartIndex, int step) {
+        return chatMemberRepository.getAllMessageChat(roomId, PageRequest.of(StartIndex, step));
     }
 }
