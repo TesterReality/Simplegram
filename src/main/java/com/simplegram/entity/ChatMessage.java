@@ -31,7 +31,6 @@ public class ChatMessage {
     @JoinColumn(name = "id_sender")
     private User userSender;
 
-    @NotBlank
     private String message;
 
     @NotBlank

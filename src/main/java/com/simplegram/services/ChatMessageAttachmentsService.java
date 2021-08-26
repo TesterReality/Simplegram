@@ -28,6 +28,7 @@ public class ChatMessageAttachmentsService {
             AttachmentsMessage attach = new AttachmentsMessage();
             attach.setType(chatMessageAttachment.getType());
             attach.setUrl(chatMessageAttachment.getUrl());
+            attach.setFileName(chatMessageAttachment.getFileName());
             attachmentsMessages.add(attach);
         }
 

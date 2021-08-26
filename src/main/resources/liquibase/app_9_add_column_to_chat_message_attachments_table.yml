@@ -1,0 +1,15 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-2
+      author: vlad
+      changes:
+        - addColumn:
+            tableName: chat_message_attachments
+            columns:
+              - column:
+                  name: file_name
+                  type: varchar(255)
+                    constraints:
+                      unique: false
+                      nullable: false

@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class AttachmentsMessage {
     private String url;
+    private String fileName;
     private String type;
 }

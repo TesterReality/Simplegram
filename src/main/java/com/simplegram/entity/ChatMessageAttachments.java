@@ -27,4 +27,8 @@ public class ChatMessageAttachments {
 
     @NotBlank
     private String type;
+
+    @Column(name = "file_name")
+    @NotBlank
+    private String fileName;
 }

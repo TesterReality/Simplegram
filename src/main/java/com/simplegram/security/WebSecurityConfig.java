@@ -24,6 +24,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -74,12 +76,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String pathToUserAvatars = config.getUploadPath() + "avatars/";
-        File dirUpload = new File(pathToUserAvatars);
-        String path = dirUpload.getAbsolutePath();
-        registry.addResourceHandler("/avatars/**")
-                .addResourceLocations("file:" + path + "/")
-                .setCachePeriod(0);
+        List<String> allAssesPath = new ArrayList<>();
+        allAssesPath.add("avatars/");
+        allAssesPath.add("chatDownloads/");
+
+        for (String dir : allAssesPath) {
+            String pathToUserAvatars = config.getUploadPath() + dir;
+            File dirUpload = new File(pathToUserAvatars);
+            String path = dirUpload.getAbsolutePath();
+            registry.addResourceHandler("/"+dir+"**")
+                    .addResourceLocations("file:" + path + "/")
+                    .setCachePeriod(0);
+        }
 
     }
 }
