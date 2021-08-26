@@ -1,0 +1,20 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: DEV-2
+      author: vlad
+      changes:
+        - addColumn:
+            tableName: chat_room
+            columns:
+              - column:
+                  name: dateLastMessage
+                  type: timestamp without time zone
+                  constraints:
+                    nullable: true
+              - column:
+                  name: lastMessage
+                  type: varchar(255)
+                    constraints:
+                      unique: false
+                      nullable: true

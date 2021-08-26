@@ -1,10 +1,9 @@
 package com.simplegram.controller;
 
-import com.simplegram.entity.ChatMember;
-import com.simplegram.entity.ChatMessage;
 import com.simplegram.entity.ChatRoom;
 import com.simplegram.entity.User;
 import com.simplegram.payload.response.GetChatResponse;
+import com.simplegram.repository.ChatRoomRepository;
 import com.simplegram.security.services.UserDetailsImpl;
 import com.simplegram.services.*;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Log4j2
@@ -28,6 +26,7 @@ public class ChatsController {
     private final ChatMessageService chatMessageService;
     private final MessageStatusService messageStatusService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final ChatRoomRepository chatRoomRepository;
 
     @GetMapping("/getChats")
     @PreAuthorize("isAuthenticated()")
@@ -35,20 +34,18 @@ public class ChatsController {
         List<GetChatResponse> responseAllChat = new ArrayList<>();
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ChatMember> usersRoom = chatMemberService.getAllRoomIDByUserID(userDetails.getId());
+        List<ChatRoom> usersRooms = chatMemberService.getAllRoomsByUserID(userDetails.getId());
 
-        for (ChatMember chatMember : usersRoom) {
+        for (ChatRoom userRoom : usersRooms) {
             GetChatResponse chat = new GetChatResponse();
-            chat.setTitle(chatRoomService.getTitleOfRoomId(chatMember.getIdChat(), userDetails.getId()));
+            chat.setTitle(chatRoomService.getTitleOfRoomId(userRoom.getId(), userDetails.getId()));
+            chat.setLastMessage(userRoom.getLastMessage());
+            chat.setTimeLastMessage(userRoom.getDateLastMessage());
 
-            ChatMessage lastMessageInRoom = chatMessageService.getLastMessageByRoomId(chatMember.getIdChat());
-            chat.setLastMessage(lastMessageInRoom.getMessage());
-            chat.setTimeLastMessage(lastMessageInRoom.getDate());
-
-            chat.setGroup(chatRoomService.isGroupChat(chatMember.getIdChat()));
-            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(chatMember.getIdChat(), userDetails.getId()));
-            chat.setChatId(chatMember.getIdChat());
-            if (!chat.isGroup()){
+            chat.setGroup(chatRoomService.isGroupChat(userRoom.getId()));
+            chat.setCountUnreadMessage(messageStatusService.getCountUnreadMessageByRoomId(userRoom.getId(), userDetails.getId()));
+            chat.setChatId(userRoom.getId());
+            if (!chat.isGroup()) {
                 //значит приватный чат
                 User userFriend = userDetailsService.findByLogin(chat.getTitle()).get();
                 chat.setAvatars(userFriend.getAvatar());
@@ -57,7 +54,6 @@ public class ChatsController {
 
             responseAllChat.add(chat);
         }
-        responseAllChat.sort(Comparator.comparing(o -> o.getTimeLastMessage()));
 
         return ResponseEntity
                 .ok()

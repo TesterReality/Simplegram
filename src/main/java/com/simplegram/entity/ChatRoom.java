@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,4 +35,7 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)
     Set<ChatMessage> chatMessages = new HashSet<>();
+
+    private String lastMessage;
+    private LocalDateTime dateLastMessage;
 }

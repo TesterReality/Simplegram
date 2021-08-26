@@ -23,7 +23,6 @@ public class ChatMessage {
     @Column(name = "id", updatable = false, nullable = false)
     private String id = UUID.randomUUID().toString();
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_chat")
     private ChatRoom chatRoom;

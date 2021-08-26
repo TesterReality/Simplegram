@@ -11,6 +11,7 @@ import com.simplegram.exceptions.BadRequestException;
 import com.simplegram.payload.request.LoginRequest;
 import com.simplegram.payload.request.SignupRequest;
 import com.simplegram.payload.response.JwtResponse;
+import com.simplegram.repository.ChatRoomRepository;
 import com.simplegram.repository.UserRepository;
 import com.simplegram.security.jwt.JwtUtils;
 import com.simplegram.security.services.UserDetailsImpl;
@@ -56,6 +57,7 @@ public class AuthController {
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final ChatMessageAttachmentsService attachmentsService;
+    private final ChatRoomRepository chatRoomRepository;
 
     @PostMapping("/signin")
     public JwtResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -130,6 +132,10 @@ public class AuthController {
         message.setDate(LocalDateTime.now());
 
         chatMessageService.saveChatMessage(message);
+
+        chat.setDateLastMessage(message.getDate());
+        chat.setLastMessage(message.getMessage());
+        chatRoomRepository.save(chat);
 
         ChatMessageAttachments attachments = new ChatMessageAttachments();
         attachments.setMessage(message);

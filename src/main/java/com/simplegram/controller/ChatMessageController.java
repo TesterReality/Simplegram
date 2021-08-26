@@ -31,9 +31,9 @@ public class ChatMessageController {
     private final ChatMessageAttachmentsService chatAttachmentsService;
     private final MessageStatusService messageStatusService;
 
-    @GetMapping("/message")
+    @GetMapping("/messages")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<GetMessageFromChatResponse>> sendMessage(@RequestParam("sel") String roomID) {
+    public ResponseEntity<List<GetMessageFromChatResponse>> getMessagesFromChatRoom(@RequestParam("sel") String roomID) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (!chatRoomService.isChatRoomExist(roomID)) {
