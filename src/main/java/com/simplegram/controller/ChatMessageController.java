@@ -1,14 +1,13 @@
 package com.simplegram.controller;
 
+import com.simplegram.entity.ChatMember;
 import com.simplegram.entity.ChatMessage;
+import com.simplegram.entity.MessageStatus;
 import com.simplegram.entity.enums.ChatMessageType;
 import com.simplegram.exceptions.BadRequestException;
 import com.simplegram.exceptions.UnauthorizedException;
 import com.simplegram.payload.response.GetMessageFromChatResponse;
-import com.simplegram.repository.ChatMessageAttachmentsRepository;
-import com.simplegram.repository.ChatMessageRepository;
-import com.simplegram.repository.ChatRoomRepository;
-import com.simplegram.repository.UserRepository;
+import com.simplegram.repository.*;
 import com.simplegram.security.services.UserDetailsImpl;
 import com.simplegram.services.*;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,8 @@ public class ChatMessageController {
     private final UserRepository userRepository;
     private final SaveChatMessageFileService attachSaver;
     private final ChatMessageRepository chatMessageRepository;
-    private final ChatMessageAttachmentsRepository chatMessageAttachmentsRepository;
+    private final ChatMemberRepository chatMemberRepository;
+    private final MessageStatusRepository messageStatusRepository;
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
@@ -84,6 +84,18 @@ public class ChatMessageController {
         chatMessage.setMessageAttachments(attachSaver.saveFiles(chatMessage, roomId, files));
 
         chatMessageRepository.save(chatMessage);
+
+        List<ChatMember> allUsersInChat = chatMemberRepository.findAllIdUserByIdChat(roomId);
+
+        for(ChatMember roomOwner:allUsersInChat)
+        {
+            MessageStatus status = new MessageStatus();
+
+            status.setUser(userRepository.findById(roomOwner.getIdUser()));
+            status.setMessage(chatMessage);
+            status.setStatus(ChatMessageType.UNREAD.toString());
+            messageStatusRepository.save(status);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
