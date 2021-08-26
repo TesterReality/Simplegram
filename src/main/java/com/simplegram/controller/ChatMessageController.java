@@ -2,6 +2,7 @@ package com.simplegram.controller;
 
 import com.simplegram.entity.ChatMember;
 import com.simplegram.entity.ChatMessage;
+import com.simplegram.entity.ChatRoom;
 import com.simplegram.entity.MessageStatus;
 import com.simplegram.entity.enums.ChatMessageType;
 import com.simplegram.exceptions.BadRequestException;
@@ -76,7 +77,9 @@ public class ChatMessageController {
 
         ChatMessage chatMessage = new ChatMessage();
 
-        chatMessage.setChatRoom(chatRoomRepository.getChatRoomById(roomId));
+        ChatRoom room = chatRoomRepository.getChatRoomById(roomId);
+
+        chatMessage.setChatRoom(room);
         chatMessage.setType(ChatMessageType.UNREAD.toString());
         chatMessage.setMessage(message);
         chatMessage.setUserSender(userRepository.findById(userDetails.getId()));
@@ -84,6 +87,10 @@ public class ChatMessageController {
         chatMessage.setMessageAttachments(attachSaver.saveFiles(chatMessage, roomId, files));
 
         chatMessageRepository.save(chatMessage);
+
+        room.setLastMessage(chatMessage.getMessage());
+        room.setDateLastMessage(chatMessage.getDate());
+        chatRoomRepository.save(room);
 
         List<ChatMember> allUsersInChat = chatMemberRepository.findAllIdUserByIdChat(roomId);
 
