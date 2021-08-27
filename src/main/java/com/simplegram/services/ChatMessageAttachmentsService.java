@@ -14,13 +14,11 @@ import java.util.List;
 public class ChatMessageAttachmentsService {
     private final ChatMessageAttachmentsRepository attachmentsRepository;
 
-    public void saveAttachment(ChatMessageAttachments attachments)
-    {
+    public void saveAttachment(ChatMessageAttachments attachments) {
         attachmentsRepository.save(attachments);
     }
 
-    public List<AttachmentsMessage> getAllChatAttachmentByIdMessage(String messageId)
-    {
+    public List<AttachmentsMessage> getAllChatAttachmentByIdMessage(String messageId) {
         List<AttachmentsMessage> attachmentsMessages = new ArrayList<>();
         List<ChatMessageAttachments> chatMessageAttachments = attachmentsRepository.findAllByMessage_Id(messageId);
 

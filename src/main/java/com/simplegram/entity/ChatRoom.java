@@ -5,11 +5,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,6 +17,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "chat_room")
 public class ChatRoom {
+    @ManyToMany(mappedBy = "usersChats")
+    Set<User> users;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    Set<ChatMessage> chatMessages = new HashSet<>();
+
     @Id
     @Column(name = "id", updatable = false, nullable = false, insertable = false)
     private String id = UUID.randomUUID().toString();
@@ -30,12 +34,7 @@ public class ChatRoom {
     @JoinColumn(name = "creator")
     private User creator;
 
-    @ManyToMany(mappedBy = "usersChats")
-    Set<User> users;
-
-    @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)
-    Set<ChatMessage> chatMessages = new HashSet<>();
-
     private String lastMessage;
+
     private LocalDateTime dateLastMessage;
 }

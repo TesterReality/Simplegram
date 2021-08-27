@@ -25,23 +25,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException
-                (messageSource.getMessage("error.UserLoginNotFound", null, Locale.getDefault()) + ": " + login));
+                        (messageSource.getMessage("error.UserLoginNotFound", null, Locale.getDefault()) + ": " + login));
 
         return UserDetailsImpl.build(user);
     }
 
-    public boolean existsByLogin(String login)
-    {
+    public boolean existsByLogin(String login) {
         return userRepository.existsByLogin(login);
     }
 
-    public Optional<User> findByLogin(String login)
-    {
+    public Optional<User> findByLogin(String login) {
         return userRepository.findByLogin(login);
     }
 
-    public User findById(String userId)
-    {
+    public User findById(String userId) {
         return userRepository.findById(userId);
     }
 

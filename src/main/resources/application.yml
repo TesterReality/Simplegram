@@ -11,9 +11,9 @@ spring:
     username: postgres
     password: qwerty3
   jpa:
-      hibernate:
-        ddl-auto: validate
-        #ddl-auto: create
+    hibernate:
+      ddl-auto: validate
+      #ddl-auto: create
   liquibase:
     enabled: true
     change-log: classpath:liquibase/ChangeLog.yml

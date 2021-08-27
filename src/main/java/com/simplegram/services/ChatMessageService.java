@@ -8,7 +8,6 @@ import com.simplegram.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,8 +17,7 @@ public class ChatMessageService {
     private final ChatMemberService chatMemberService;
     private final MessageStatusService messageStatusService;
 
-    public void saveChatMessage(ChatMessage chatMessage)
-    {
+    public void saveChatMessage(ChatMessage chatMessage) {
         chatMessageRepository.save(chatMessage);
 
         List<User> allUsersInRoom = chatMemberService.getAllUserByRoomID(chatMessage.getChatRoom().getId());
@@ -32,8 +30,7 @@ public class ChatMessageService {
         }
     }
 
-    public ChatMessage getLastMessageByRoomId(String roomId)
-    {
+    public ChatMessage getLastMessageByRoomId(String roomId) {
         return chatMessageRepository.findFirstByChatRoomIdOrderByDateDesc(roomId);
     }
 }

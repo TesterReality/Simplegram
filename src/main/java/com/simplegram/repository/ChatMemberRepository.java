@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.util.Pair;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChatMemberRepository extends JpaRepository<ChatMember, Long>, JpaSpecificationExecutor<ChatMember> {
@@ -27,8 +25,8 @@ public interface ChatMemberRepository extends JpaRepository<ChatMember, Long>, J
     @Query(value = "select distinct c from ChatMessage c where c.chatRoom.id  IN (select b.idChat from ChatMember b where b.idUser = :uuid)  order by c.date desc")
     List<ChatMessage> test(@Param("uuid") String userUUID, Pageable pageable);
 
-    @Query(value = "select distinct c from ChatMessage c where c.chatRoom.id =:roomId order by c.date ASC ")
-    List<ChatMessage> getAllMessageChat(@Param("roomId") String roomId ,Pageable pageable);
+    @Query(value = "select c from ChatMessage c where c.chatRoom.id =:roomId order by c.date ASC ")
+    List<ChatMessage> getAllMessageChat(@Param("roomId") String roomId, Pageable pageable);
 
     @Query("select c from ChatRoom c where c.id IN (select b.idChat from ChatMember b where b.idUser = :uuid) order by c.dateLastMessage desc")
     List<ChatRoom> getAllUserRoomsFromIdUser(@Param("uuid") String userUUID, Pageable pageable);

@@ -1,11 +1,14 @@
 package com.simplegram.services;
 
 import com.simplegram.entity.ChatMember;
+import com.simplegram.entity.ChatMessage;
 import com.simplegram.entity.ChatRoom;
 import com.simplegram.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class ChatRoomService {
     }
 
     public String getTitleOfRoomId(String roomId, String userId) {
-        if(isGroupChat(roomId)){
+        if (isGroupChat(roomId)) {
             return chatRoomRepository.getChatRoomById(roomId).getName();
         }
         return userDetailsService.findById(chatMemberService.getOtherUserInRoom(roomId, userId)).getLogin();

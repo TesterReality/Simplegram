@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/chats/**").permitAll()
-                .antMatchers( "/avatars/**").permitAll()
+                .antMatchers("/avatars/**").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
             String pathToUserAvatars = config.getUploadPath() + dir;
             File dirUpload = new File(pathToUserAvatars);
             String path = dirUpload.getAbsolutePath();
-            registry.addResourceHandler("/"+dir+"**")
+            registry.addResourceHandler("/" + dir + "**")
                     .addResourceLocations("file:" + path + "/")
                     .setCachePeriod(0);
         }

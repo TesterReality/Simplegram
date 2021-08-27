@@ -12,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,6 +32,7 @@ import java.util.UUID;
 public class SaveChatMessageFileService {
     private final ConfigProperties config;
 
+    //@Transactional(propagation = Propagation.REQUIRES_NEW )
     public Set<ChatMessageAttachments> saveFiles(ChatMessage chatMessage, String roomId, List<MultipartFile> files) {
         Set<ChatMessageAttachments> attachments = new HashSet<>();
         for (MultipartFile file : files) {

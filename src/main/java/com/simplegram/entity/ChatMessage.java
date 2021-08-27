@@ -3,7 +3,6 @@ package com.simplegram.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,13 +18,22 @@ import java.util.UUID;
 @Entity
 @Table(name = "chat_message")
 public class ChatMessage {
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
+    Set<ChatMessageAttachments> messageAttachments = new HashSet<>();
+
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
+    Set<MessageStatus> messageStatuses = new HashSet<>();
+
     @Id
     @Column(name = "id", updatable = false, nullable = false)
     private String id = UUID.randomUUID().toString();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_chat")
+    @JoinColumn(name = "id_chat", updatable = false, insertable = false)
     private ChatRoom chatRoom;
+
+    @Column(name = "id_chat")
+    private String chatRoomId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_sender")
@@ -42,10 +50,4 @@ public class ChatMessage {
 
     @Column(name = "date_delete")
     private LocalDateTime dateDelete;
-
-    @OneToMany(mappedBy = "message",cascade = CascadeType.ALL)
-    Set<ChatMessageAttachments> messageAttachments = new HashSet<>();
-
-    @OneToMany(mappedBy = "message",cascade = CascadeType.ALL)
-    Set<MessageStatus> messageStatuses = new HashSet<>();
 }

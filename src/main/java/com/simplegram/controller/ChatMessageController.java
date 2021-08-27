@@ -33,12 +33,7 @@ public class ChatMessageController {
     private final ChatRoomService chatRoomService;
     private final ChatMessageAttachmentsService chatAttachmentsService;
     private final MessageStatusService messageStatusService;
-    private final ChatRoomRepository chatRoomRepository;
-    private final UserRepository userRepository;
-    private final SaveChatMessageFileService attachSaver;
-    private final ChatMessageRepository chatMessageRepository;
-    private final ChatMemberRepository chatMemberRepository;
-    private final MessageStatusRepository messageStatusRepository;
+    private final SendMessageService sendMessageService;
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
@@ -68,41 +63,16 @@ public class ChatMessageController {
 
     @PostMapping("/send")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity sendMessageToRoom(@RequestParam("roomId") String roomId, @RequestParam(name = "message", required = false) String message, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
+    public ResponseEntity<HttpStatus> sendMessageToRoom(@RequestParam("roomId") String roomId,
+                                                        @RequestParam(name = "message", required = false) String message,
+                                                        @RequestPart(name = "file", required = false) List<MultipartFile> files) {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         checkRoomAvailable(roomId, userDetails.getId());
         if (message.isEmpty() && files.size() == 0)
             throw new BadRequestException("exception.empty-message");
 
-        ChatMessage chatMessage = new ChatMessage();
-
-        ChatRoom room = chatRoomRepository.getChatRoomById(roomId);
-
-        chatMessage.setChatRoom(room);
-        chatMessage.setType(ChatMessageType.UNREAD.toString());
-        chatMessage.setMessage(message);
-        chatMessage.setUserSender(userRepository.findById(userDetails.getId()));
-        chatMessage.setDate(LocalDateTime.now());
-        chatMessage.setMessageAttachments(attachSaver.saveFiles(chatMessage, roomId, files));
-
-        chatMessageRepository.save(chatMessage);
-
-        room.setLastMessage(chatMessage.getMessage());
-        room.setDateLastMessage(chatMessage.getDate());
-        chatRoomRepository.save(room);
-
-        List<ChatMember> allUsersInChat = chatMemberRepository.findAllIdUserByIdChat(roomId);
-
-        for(ChatMember roomOwner:allUsersInChat)
-        {
-            MessageStatus status = new MessageStatus();
-
-            status.setUser(userRepository.findById(roomOwner.getIdUser()));
-            status.setMessage(chatMessage);
-            status.setStatus(ChatMessageType.UNREAD.toString());
-            messageStatusRepository.save(status);
-        }
+        sendMessageService.sendMessage(roomId,message,files,userDetails.getId());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

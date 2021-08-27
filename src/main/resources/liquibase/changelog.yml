@@ -1,5 +1,5 @@
 databaseChangeLog:
-#https://github.com/spring-projects/spring-boot/issues/16888 - includeAll not working
+  #https://github.com/spring-projects/spring-boot/issues/16888 - includeAll not working
 
   - include:
       file: classpath:liquibase/app_1_create_table_users.yml
